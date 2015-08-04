@@ -21,6 +21,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code exprCompEqOp}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exprCompEqOp}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link YallParser#numOp}.
 	 * @param ctx the parse tree
 	 */
@@ -64,18 +76,6 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProgram(@NotNull YallParser.ProgramContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code functionExpr}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunctionExpr(@NotNull YallParser.FunctionExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code functionExpr}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunctionExpr(@NotNull YallParser.FunctionExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code statWhile}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -264,6 +264,16 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCompOp(@NotNull YallParser.CompOpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link YallParser#compEqOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link YallParser#compEqOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code statFork}
 	 * labeled alternative in {@link YallParser#stat}.

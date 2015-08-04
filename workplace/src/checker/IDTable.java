@@ -4,27 +4,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IDTable {
-	private IDTable parentscope;
-	private  Map<String, Variable> table = new HashMap<String, Variable>();
+	private int offset = 999999;
+	private final IDTable parentscope;
+	private final Map<String, Variable> table = new HashMap<String, Variable>();
 	
-	public IDTable(IDTable parScope){
+	public IDTable(IDTable parScope, int parentoffset){
 		this.parentscope = parScope;
+		//TODO parentoffset
 	}
 	
-	public boolean addVariable(Type type, String id){
-		if(type == Type.ERROR || type == Type.NONE){
-			System.out.println("Trying to add an error type variable: " + id);
-			return false;
-		} else if(type == Type.FUNCTION){
-			System.out.println("Trying to add a function as a variable: " + id);
-			return false;
+	public String addVariable(Type type, String id){
+		if(type == Type.ERROR ){
+			return "Trying to add an error type variable: " + id;
+			
 		} else if(existsCurrentScope(id)){
-			System.out.println("Name in use, variable not made: " + id);
-			return false;
+			return "Name in use, variable not made: " + id;	
 		} else {
-			Variable var = new Variable(type);
+			Variable var = new Variable(type, offset);
 			table.put(id, var);
-			return true;
+			return null;
 		}
 	}
 	
@@ -33,6 +31,9 @@ public class IDTable {
 		return table.containsKey(id);
 	}
 	
+	/**
+	 * 	Returns the Variable of given ID in the lowest possible scope it is available, elseway returns null
+	 */
 	public Variable getID(String id){
 		if(table.containsValue(id)){
 			return table.get(id);
@@ -42,5 +43,10 @@ public class IDTable {
 			return null;
 		}
 	}
+	
+	public IDTable getParentScope(){
+		return parentscope;
+	}
+
 
 }

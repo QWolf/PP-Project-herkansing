@@ -19,6 +19,13 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code exprCompEqOp}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link YallParser#numOp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -44,13 +51,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProgram(@NotNull YallParser.ProgramContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code functionExpr}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionExpr(@NotNull YallParser.FunctionExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statWhile}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -161,6 +161,12 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCompOp(@NotNull YallParser.CompOpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link YallParser#compEqOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statFork}
 	 * labeled alternative in {@link YallParser#stat}.

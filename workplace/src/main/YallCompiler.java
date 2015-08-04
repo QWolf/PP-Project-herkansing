@@ -60,6 +60,7 @@ public class YallCompiler {
 	
 	public static void main(String[] args){
 		if (args.length != 1){
+			
 			System.out.println("Usage: filename");
 		} else {
 		//example: src/files/tests/checker1.txt

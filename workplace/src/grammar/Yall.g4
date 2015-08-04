@@ -9,26 +9,19 @@ grammar Yall;
 import YallVocab;
  
 //Full Program, ID is program name
-program 	: 	YALL ID block*
+program 	: 	YALL ID block
  			;
  
 //Program Blocks, either a function or a single statement			
-block		: 	stat		#blockStatement
-//			|	function	#blockFunction
+block		: 	stat*		#blockStatement
  			;
-//Functions 
-//function	: 	FUNCTION ID INTO funcreturn  LBLOCK ((type ID COMMA)* type ID )? RBLOCK LBRACE block* RBRACE
-//			;
- 			
-//funcreturn	:	type ID
-//			|	NONE
-//			;
+
 
 //Statement	
 stat		: 	decl						#statDeclare
  			| 	ID IS expr SEMI				#statAssign
- 			|	IF LBLOCK expr RBLOCK THEN LBRACE block* RBRACE (ELSE LBRACE block* RBRACE)? #statIf
- 			|	WHILE LBLOCK expr RBLOCK DO LBRACE block* RBRACE 					#statWhile
+ 			|	IF LBLOCK expr RBLOCK THEN LBRACE block RBRACE (ELSE LBRACE block RBRACE)? #statIf
+ 			|	WHILE LBLOCK expr RBLOCK DO LBRACE block RBRACE 					#statWhile
 // 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block* RBRACE		#statFor
 			|	INPUT ID SEMI				#statInput
 			|	OUTPUT expr SEMI			#statOutput
@@ -36,7 +29,6 @@ stat		: 	decl						#statDeclare
 			|	UNLOCK NUM SEMI				#statUnlock
 			|	FORK NUM SEMI				#statFork
 			|	JOIN NUM SEMI				#statJoin
-//			|	ID LPAR ((expr COMMA)* expr)? RPAR SEMI #statFunction
  			;
  			
 //Declaration, either with or without an initial value			
@@ -51,11 +43,11 @@ expr		:	LBLOCK expr RBLOCK	#exprBlock
 			|	expr numOp expr		#exprNumOp
 			|	expr boolOp expr	#exprBoolOp
 			|	expr compOp expr	#exprCompOp
+			|	expr compEqOp expr	#exprCompEqOp
 			|	UP LPAR (NUM COMMA)? ID RPAR		#exprUp
+			|	ID					#exprID
 			|	NUM					#exprNum
 			|	bool				#exprBool
-			| 	ID LPAR ((expr COMMA)* expr)? RPAR 	#functionExpr
-			|	ID					#exprID
 			;
 
 // Numerical Operators
@@ -75,9 +67,12 @@ compOp	:	GT						// Greater Than
 		|	LT						// Less Than
 		|	GE						// GreaterEqual
 		|	LE						// LessEqual
-		|	NE						// NotEqual
-		|	EQ						// Equal
 		;
+		
+// Comparison if equal or not		
+compEqOp	:	EQ
+			|	NE
+			;
 
 //Types
 type		:	INTEGER		#typeInt

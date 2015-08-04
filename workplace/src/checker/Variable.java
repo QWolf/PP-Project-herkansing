@@ -1,14 +1,20 @@
 package checker;
 
 public class Variable {
-	private Type type;
+	private final Type type;
+	private int offset;
 
-	public Variable(Type type2) {
-		this.type = type2;
+	public Variable(Type type, int offset) {
+		this.type = type;
+		this.offset = offset;
 	}
 
 	public Type getType() {
 		return type;
+	}
+	
+	public int getOffset(){
+		return offset;
 	}
 
 

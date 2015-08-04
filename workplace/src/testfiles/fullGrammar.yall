@@ -22,23 +22,10 @@ output B1;
 B2 is X and B1;
 output B2;
 
-function Test into none [integer A, boolean B, integer C]{
-	if [B] then {
-			Z is A; 
-		} else {
-			Z is 3;
-		} 
-
-	if [Y >> Z] then { 
-		X is C == 0;
-	}
-	output Z;
-	output X;
-}
-
-function Test2 into integer Y []{
+if [X] then {
+	integer Z is Y; 
 	Y is up(1, Z);
-	output Up(1, Z);
-}
-
-Test(Test2(), true, 3);
+} else {
+	integer Z is 3;
+	Y is up(Z);
+} 

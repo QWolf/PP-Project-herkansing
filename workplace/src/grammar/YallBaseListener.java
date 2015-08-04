@@ -29,6 +29,18 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNumOp(@NotNull YallParser.NumOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -72,18 +84,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitProgram(@NotNull YallParser.ProgramContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFunctionExpr(@NotNull YallParser.FunctionExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFunctionExpr(@NotNull YallParser.FunctionExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -276,6 +276,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompOp(@NotNull YallParser.CompOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCompEqOp(@NotNull YallParser.CompEqOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCompEqOp(@NotNull YallParser.CompEqOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
