@@ -89,18 +89,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLineStatement(@NotNull YallParser.LineStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLineStatement(@NotNull YallParser.LineStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatWhile(@NotNull YallParser.StatWhileContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -197,30 +185,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlock(@NotNull YallParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBlock(@NotNull YallParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLineFunction(@NotNull YallParser.LineFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLineFunction(@NotNull YallParser.LineFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatIf(@NotNull YallParser.StatIfContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -269,6 +233,18 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlockStatement(@NotNull YallParser.BlockStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlockStatement(@NotNull YallParser.BlockStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -276,6 +252,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlockFunction(@NotNull YallParser.BlockFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlockFunction(@NotNull YallParser.BlockFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

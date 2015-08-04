@@ -77,18 +77,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitFunctionExpr(@NotNull YallParser.FunctionExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lineStatement}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 */
-	void enterLineStatement(@NotNull YallParser.LineStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lineStatement}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 */
-	void exitLineStatement(@NotNull YallParser.LineStatementContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statWhile}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -181,28 +169,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitExprUp(@NotNull YallParser.ExprUpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link YallParser#block}.
-	 * @param ctx the parse tree
-	 */
-	void enterBlock(@NotNull YallParser.BlockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link YallParser#block}.
-	 * @param ctx the parse tree
-	 */
-	void exitBlock(@NotNull YallParser.BlockContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lineFunction}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 */
-	void enterLineFunction(@NotNull YallParser.LineFunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lineFunction}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 */
-	void exitLineFunction(@NotNull YallParser.LineFunctionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statIf}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -249,6 +215,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitStatFunction(@NotNull YallParser.StatFunctionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code blockStatement}
+	 * labeled alternative in {@link YallParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockStatement(@NotNull YallParser.BlockStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code blockStatement}
+	 * labeled alternative in {@link YallParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockStatement(@NotNull YallParser.BlockStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code boolFalse}
 	 * labeled alternative in {@link YallParser#bool}.
 	 * @param ctx the parse tree
@@ -260,6 +238,18 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolFalse(@NotNull YallParser.BoolFalseContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code blockFunction}
+	 * labeled alternative in {@link YallParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockFunction(@NotNull YallParser.BlockFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code blockFunction}
+	 * labeled alternative in {@link YallParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockFunction(@NotNull YallParser.BlockFunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code exprNum}
 	 * labeled alternative in {@link YallParser#expr}.

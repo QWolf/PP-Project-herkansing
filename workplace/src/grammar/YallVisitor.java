@@ -52,13 +52,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionExpr(@NotNull YallParser.FunctionExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lineStatement}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLineStatement(@NotNull YallParser.LineStatementContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code statWhile}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -113,19 +106,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExprUp(@NotNull YallParser.ExprUpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link YallParser#block}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBlock(@NotNull YallParser.BlockContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code lineFunction}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLineFunction(@NotNull YallParser.LineFunctionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code statIf}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -153,12 +133,26 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatFunction(@NotNull YallParser.StatFunctionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code blockStatement}
+	 * labeled alternative in {@link YallParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockStatement(@NotNull YallParser.BlockStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code boolFalse}
 	 * labeled alternative in {@link YallParser#bool}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBoolFalse(@NotNull YallParser.BoolFalseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockFunction}
+	 * labeled alternative in {@link YallParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockFunction(@NotNull YallParser.BlockFunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code exprNum}
 	 * labeled alternative in {@link YallParser#expr}.

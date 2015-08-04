@@ -9,18 +9,15 @@ grammar Yall;
 import YallVocab;
  
 //Full Program, ID is program name
-program 	: 	YALL ID block
+program 	: 	YALL ID block*
  			;
  
 //Program Blocks, either a function or a single statement			
-block		:	line*
- 			;
- 			
-line		: 	function	#lineFunction
- 			|	stat		#lineStatement
+block		: 	function	#blockFunction
+ 			|	stat		#blockStatement
  			;
 //Functions 
-function	: 	FUNCTION ID INTO funcreturn  LBLOCK ((type ID COMMA)* type ID )? RBLOCK LBRACE block RBRACE
+function	: 	FUNCTION ID INTO funcreturn  LBLOCK ((type ID COMMA)* type ID )? RBLOCK LBRACE block* RBRACE
  			;
  			
 funcreturn	:	type ID
@@ -30,9 +27,9 @@ funcreturn	:	type ID
 //Statement	
 stat		: 	decl						#statDeclare
  			| 	ID IS expr SEMI				#statAssign
- 			|	IF LBLOCK expr RBLOCK THEN LBRACE block RBRACE (ELSE LBRACE block RBRACE)? #statIf
- 			|	WHILE LBLOCK expr RBLOCK DO LBRACE block RBRACE 					#statWhile
-// 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block RBRACE		#statFor
+ 			|	IF LBLOCK expr RBLOCK THEN LBRACE block* RBRACE (ELSE LBRACE block* RBRACE)? #statIf
+ 			|	WHILE LBLOCK expr RBLOCK DO LBRACE block* RBRACE 					#statWhile
+// 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block* RBRACE		#statFor
 			|	INPUT ID SEMI				#statInput
 			|	OUTPUT expr SEMI			#statOutput
 			|	LOCK NUM SEMI				#statLock
