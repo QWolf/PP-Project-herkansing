@@ -66,24 +66,12 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolTrue(@NotNull YallParser.BoolTrueContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link YallParser#funcreturn}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFuncreturn(@NotNull YallParser.FuncreturnContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code statDeclare}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatDeclare(@NotNull YallParser.StatDeclareContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link YallParser#function}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunction(@NotNull YallParser.FunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statJoin}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -126,19 +114,19 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolOp(@NotNull YallParser.BoolOpContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code statFunction}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatFunction(@NotNull YallParser.StatFunctionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code blockStatement}
 	 * labeled alternative in {@link YallParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBlockStatement(@NotNull YallParser.BlockStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declAssign}
+	 * labeled alternative in {@link YallParser#decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclAssign(@NotNull YallParser.DeclAssignContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code boolFalse}
 	 * labeled alternative in {@link YallParser#bool}.
@@ -147,26 +135,12 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolFalse(@NotNull YallParser.BoolFalseContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code blockFunction}
-	 * labeled alternative in {@link YallParser#block}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBlockFunction(@NotNull YallParser.BlockFunctionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code exprNum}
 	 * labeled alternative in {@link YallParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExprNum(@NotNull YallParser.ExprNumContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code declDeclAssign}
-	 * labeled alternative in {@link YallParser#decl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclDeclAssign(@NotNull YallParser.DeclDeclAssignContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code typeBool}
 	 * labeled alternative in {@link YallParser#type}.

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class IDTable {
 	private IDTable parentscope;
-	private  Map<String, Variable> table = new HashMap<String, Variable>();
+	private  Map<String, ID> table = new HashMap<String, ID>();
 	
 	public IDTable(IDTable parScope){
 		this.parentscope = parScope;
@@ -28,12 +28,36 @@ public class IDTable {
 		}
 	}
 	
+	public boolean addFunction(Type returnType, String id, Type[] argsType, String[] argsName){
+		if(returnType == Type.FUNCTION){
+			System.out.println("Trying to add a function with a function as return type: " + id);
+			return false;
+		} else if (returnType == Type.ERROR) {
+			System.out.println("Trying to add a function with an error as return type: " + id);
+			return false;
+		} else if(existsCurrentScope(id)){
+			System.out.println("Name in use, function not made: "+ id);
+			return false;
+		} else if(argsType.length != argsName.length){
+			System.out.println("Incomplete arguments in " + id + " " + argsName + " " + argsType);
+			return false;
+		} else {
+			Function func = new Function(this, returnType, argsType, argsName);
+			table.put(id, func);
+			return true;
+			
+			
+		}
+	}
+	
+	
+	
 	
 	public boolean existsCurrentScope(String id){
 		return table.containsKey(id);
 	}
 	
-	public Variable getID(String id){
+	public ID getID(String id){
 		if(table.containsValue(id)){
 			return table.get(id);
 		} else if(parentscope != null){

@@ -9,7 +9,7 @@ public class Function implements ID{
 	
 	public Function(IDTable parent, Type returnType, Type[] argsType, String [] argsName){
 		this.parentTable = parent;
-		ownTable = new IDTable();
+		ownTable = new IDTable(parent);
 		if(argsName.length != 0){
 			for (int i = 0; i < argsName.length; i++){
 				ownTable.addVariable(argsType[i], argsName[i]);
@@ -25,6 +25,10 @@ public class Function implements ID{
 	@Override
 	public boolean isFunction() {
 		return true;
+	}
+	
+	public IDTable getParentTable(){
+		return parentTable;
 	}
 
 }

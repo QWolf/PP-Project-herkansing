@@ -1,4 +1,5 @@
 // Generated from Yall.g4 by ANTLR 4.4
+package grammar;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -76,13 +77,13 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLineStatement(@NotNull YallParser.LineStatementContext ctx) { }
+	@Override public void enterFunctionExpr(@NotNull YallParser.FunctionExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLineStatement(@NotNull YallParser.LineStatementContext ctx) { }
+	@Override public void exitFunctionExpr(@NotNull YallParser.FunctionExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -136,18 +137,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunction(@NotNull YallParser.FunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFunction(@NotNull YallParser.FunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatJoin(@NotNull YallParser.StatJoinContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -179,30 +168,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExprUp(@NotNull YallParser.ExprUpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBlock(@NotNull YallParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBlock(@NotNull YallParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLineFunction(@NotNull YallParser.LineFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLineFunction(@NotNull YallParser.LineFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -244,6 +209,18 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDeclAssign(@NotNull YallParser.DeclAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclAssign(@NotNull YallParser.DeclAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -263,18 +240,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExprNum(@NotNull YallParser.ExprNumContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclDeclAssign(@NotNull YallParser.DeclDeclAssignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclDeclAssign(@NotNull YallParser.DeclDeclAssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

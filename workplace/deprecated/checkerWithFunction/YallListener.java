@@ -1,4 +1,5 @@
 // Generated from Yall.g4 by ANTLR 4.4
+package grammar;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -64,17 +65,17 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitProgram(@NotNull YallParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lineStatement}
-	 * labeled alternative in {@link YallParser#line}.
+	 * Enter a parse tree produced by the {@code functionExpr}
+	 * labeled alternative in {@link YallParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterLineStatement(@NotNull YallParser.LineStatementContext ctx);
+	void enterFunctionExpr(@NotNull YallParser.FunctionExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code lineStatement}
-	 * labeled alternative in {@link YallParser#line}.
+	 * Exit a parse tree produced by the {@code functionExpr}
+	 * labeled alternative in {@link YallParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitLineStatement(@NotNull YallParser.LineStatementContext ctx);
+	void exitFunctionExpr(@NotNull YallParser.FunctionExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code statWhile}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -122,16 +123,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitStatDeclare(@NotNull YallParser.StatDeclareContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link YallParser#function}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunction(@NotNull YallParser.FunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link YallParser#function}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunction(@NotNull YallParser.FunctionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statJoin}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -168,28 +159,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitExprUp(@NotNull YallParser.ExprUpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link YallParser#block}.
-	 * @param ctx the parse tree
-	 */
-	void enterBlock(@NotNull YallParser.BlockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link YallParser#block}.
-	 * @param ctx the parse tree
-	 */
-	void exitBlock(@NotNull YallParser.BlockContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code lineFunction}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 */
-	void enterLineFunction(@NotNull YallParser.LineFunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code lineFunction}
-	 * labeled alternative in {@link YallParser#line}.
-	 * @param ctx the parse tree
-	 */
-	void exitLineFunction(@NotNull YallParser.LineFunctionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statIf}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -224,6 +193,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitBoolOp(@NotNull YallParser.BoolOpContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code declAssign}
+	 * labeled alternative in {@link YallParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclAssign(@NotNull YallParser.DeclAssignContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code declAssign}
+	 * labeled alternative in {@link YallParser#decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclAssign(@NotNull YallParser.DeclAssignContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code boolFalse}
 	 * labeled alternative in {@link YallParser#bool}.
 	 * @param ctx the parse tree
@@ -247,18 +228,6 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExprNum(@NotNull YallParser.ExprNumContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code declDeclAssign}
-	 * labeled alternative in {@link YallParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclDeclAssign(@NotNull YallParser.DeclDeclAssignContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code declDeclAssign}
-	 * labeled alternative in {@link YallParser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclDeclAssign(@NotNull YallParser.DeclDeclAssignContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code typeBool}
 	 * labeled alternative in {@link YallParser#type}.

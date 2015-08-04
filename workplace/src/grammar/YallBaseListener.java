@@ -113,18 +113,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncreturn(@NotNull YallParser.FuncreturnContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFuncreturn(@NotNull YallParser.FuncreturnContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatDeclare(@NotNull YallParser.StatDeclareContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -132,18 +120,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatDeclare(@NotNull YallParser.StatDeclareContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFunction(@NotNull YallParser.FunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFunction(@NotNull YallParser.FunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -221,18 +197,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatFunction(@NotNull YallParser.StatFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatFunction(@NotNull YallParser.StatFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBlockStatement(@NotNull YallParser.BlockStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -240,6 +204,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlockStatement(@NotNull YallParser.BlockStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclAssign(@NotNull YallParser.DeclAssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclAssign(@NotNull YallParser.DeclAssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -257,18 +233,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlockFunction(@NotNull YallParser.BlockFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBlockFunction(@NotNull YallParser.BlockFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterExprNum(@NotNull YallParser.ExprNumContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -276,18 +240,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExprNum(@NotNull YallParser.ExprNumContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclDeclAssign(@NotNull YallParser.DeclDeclAssignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclDeclAssign(@NotNull YallParser.DeclDeclAssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

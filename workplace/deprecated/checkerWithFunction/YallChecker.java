@@ -17,13 +17,11 @@ public class YallChecker extends YallBaseListener{
 		this.errors = new ArrayList<String>();
 	}
 	
-	@Override 
-	public void enterProgram(@NotNull YallParser.ProgramContext ctx) { 
+	@Override public void enterDeclAssign(@NotNull YallParser.DeclAssignContext ctx) { 
 		
 	}
 
-	@Override 
-	public void exitProgram(@NotNull YallParser.ProgramContext ctx) { 
+	@Override public void enterDeclDecl(@NotNull YallParser.DeclDeclContext ctx) { 
 		
 	}
 

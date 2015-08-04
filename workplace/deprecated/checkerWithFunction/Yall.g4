@@ -9,26 +9,26 @@ grammar Yall;
 import YallVocab;
  
 //Full Program, ID is program name
-program 	: 	YALL ID block*
+program 	: 	YALL ID stat*
  			;
  
 //Program Blocks, either a function or a single statement			
-block		: 	stat		#blockStatement
+//block		: 	stat		#blockStatement
 //			|	function	#blockFunction
- 			;
+// 			;
 //Functions 
 //function	: 	FUNCTION ID INTO funcreturn  LBLOCK ((type ID COMMA)* type ID )? RBLOCK LBRACE block* RBRACE
 //			;
  			
-//funcreturn	:	type ID
-//			|	NONE
-//			;
+funcreturn	:	type ID
+			|	NONE
+			;
 
 //Statement	
 stat		: 	decl						#statDeclare
  			| 	ID IS expr SEMI				#statAssign
- 			|	IF LBLOCK expr RBLOCK THEN LBRACE block* RBRACE (ELSE LBRACE block* RBRACE)? #statIf
- 			|	WHILE LBLOCK expr RBLOCK DO LBRACE block* RBRACE 					#statWhile
+ 			|	IF LBLOCK expr RBLOCK THEN LBRACE stat* RBRACE (ELSE LBRACE stat* RBRACE)? #statIf
+ 			|	WHILE LBLOCK expr RBLOCK DO LBRACE stat* RBRACE 					#statWhile
 // 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block* RBRACE		#statFor
 			|	INPUT ID SEMI				#statInput
 			|	OUTPUT expr SEMI			#statOutput
