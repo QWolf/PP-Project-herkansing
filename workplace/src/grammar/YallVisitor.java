@@ -114,6 +114,12 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolOp(@NotNull YallParser.BoolOpContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link YallParser#init}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInit(@NotNull YallParser.InitContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code blockStatement}
 	 * labeled alternative in {@link YallParser#block}.
 	 * @param ctx the parse tree
@@ -127,6 +133,13 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDeclAssign(@NotNull YallParser.DeclAssignContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exprNot}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprNot(@NotNull YallParser.ExprNotContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code boolFalse}
 	 * labeled alternative in {@link YallParser#bool}.

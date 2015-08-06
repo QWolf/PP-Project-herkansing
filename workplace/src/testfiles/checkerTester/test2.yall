@@ -1,0 +1,8 @@
+YALL Test2
+
+!!Testing variablenames
+boolean Glow245425lkjgalhajkslhdsjkfhsdjkghkalskjvbksHKJHEbfksjhalskfj;
+
+!!Testing Input & Output
+input Glow245425lkjgalhajkslhdsjkfhsdjkghkalskjvbksHKJHEbfksjhalskfj;
+output Glow245425lkjgalhajkslhdsjkfhsdjkghkalskjvbksHKJHEbfksjhalskfj /= true;

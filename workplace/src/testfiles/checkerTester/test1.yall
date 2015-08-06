@@ -1,0 +1,33 @@
+YALL Test1
+
+boolean Test is false;
+boolean Left is false;
+boolean Right is true;
+!!boolean Middle is true;
+
+if [Left == Right]
+then {
+	output false;
+	}
+
+!@ 	
+!	Loops from 1 to 10, 
+!	Puts right to true if not already, elseway puts left to true, resets counter
+!	If both left and right are true, exit loop
+@!
+while [Test] 
+do {
+	integer I is 0;
+	if [I << 10] then {
+		I is I plus 1;
+	} else {
+		output I;
+		I is 0;
+		if [not Right] then {
+			Right is true; 
+		} else {
+			Left is true;
+		}
+		Test is Left and Right;
+	}	
+}

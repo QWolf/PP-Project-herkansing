@@ -2,7 +2,10 @@ lexer grammar YallVocab;
 
 @header{package grammar;}
 
-YALL: 'YALL';
+YALL: 	'YALL';
+SPIDS:	'SPIDS';
+GLOBAL: 'global';
+LOCAL:	'local';
 
 //Keywords
 IS:		'is';
@@ -49,6 +52,8 @@ DIVIDE: 'div';
 //Boolean operators
 AND: 	'and';
 OR: 	'or';
+XOR:	'xor';
+NOT:	'not'; 
 
 //Compare
 GT: 	'>>';
@@ -56,7 +61,7 @@ LT:		'<<';
 GE:		'>=';
 LE: 	'=<';
 EQ: 	'==';
-NE: 	'//';
+NE: 	'/=';
 
 
 
@@ -68,6 +73,8 @@ NUM: DIGIT (DIGIT)*;
 
 
 //Skipped token types
+COMMENT: EXCL EXCL .*? '\n' -> skip;
+COMMENTBLOCK: EXCL AT .*? AT EXCL -> skip;
 WS: [ \t\r\n]+ -> skip;
 
 

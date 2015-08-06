@@ -7,11 +7,14 @@ grammar Yall;
  
  
 import YallVocab;
+
  
 //Full Program, ID is program name
-program 	: 	YALL ID block
+program 	: 	YALL ID init? block
  			;
- 
+ 			
+init		: 	SPIDS NUM GLOBAL decl* LOCAL
+			;
 //Program Blocks, either a function or a single statement			
 block		: 	stat*		#blockStatement
  			;
@@ -42,6 +45,7 @@ decl		:	type ID SEMI			#declDecl
 expr		:	LBLOCK expr RBLOCK	#exprBlock
 			|	expr numOp expr		#exprNumOp
 			|	expr boolOp expr	#exprBoolOp
+			|	NOT expr			#exprNot
 			|	expr compOp expr	#exprCompOp
 			|	expr compEqOp expr	#exprCompEqOp
 			|	UP LPAR (NUM COMMA)? ID RPAR		#exprUp
@@ -49,6 +53,7 @@ expr		:	LBLOCK expr RBLOCK	#exprBlock
 			|	NUM					#exprNum
 			|	bool				#exprBool
 			;
+
 
 // Numerical Operators
 numOp	:	PLUS				
@@ -59,7 +64,8 @@ numOp	:	PLUS
 		
 // Boolean Operators
 boolOp	:	AND					
-		|	OR					
+		|	OR	
+		|	XOR				
 		;
 		
 // Comparison Operators
