@@ -69,9 +69,6 @@ ID: UPPERCASE (LETTER | DIGIT)*;
 NUM: DIGIT (DIGIT)*;
 
 
-
-
-
 //Skipped token types
 COMMENT: EXCL EXCL .*? '\n' -> skip;
 COMMENTBLOCK: EXCL AT .*? AT EXCL -> skip;

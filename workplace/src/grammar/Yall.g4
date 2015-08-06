@@ -5,16 +5,17 @@
  
 grammar Yall;
  
- 
-import YallVocab;
+import YallVocab; 
 
  
 //Full Program, ID is program name
 program 	: 	YALL ID init? block
  			;
- 			
+
+// Amount of cores running and global variable initializations 			
 init		: 	SPIDS NUM GLOBAL decl* LOCAL
 			;
+			
 //Program Blocks, either a function or a single statement			
 block		: 	stat*		#blockStatement
  			;
