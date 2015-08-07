@@ -9,17 +9,27 @@ import YallVocab;
 
  
 //Full Program, ID is program name
-program 	: 	YALL ID init? block
+program 	: 	YALL ID init? toplevelblock
  			;
 
 // Amount of cores running and global variable initializations 			
-init		: 	SPIDS NUM GLOBAL decl* LOCAL
+init		:  GLOBAL decl* LOCAL
 			;
-			
-//Program Blocks, either a function or a single statement			
-block		: 	stat*		#blockStatement
- 			;
 
+//Program Blocks, single statements, every block has it's own scope level	
+			
+// The top level of the program is the only level where forks and joins are allowed
+toplevelblock: 	toplevelblockPart*				#toplvlBlock
+			;
+
+toplevelblockPart: stat							#toplvlStat
+			|	FORK ID LPAR toplevelblock RPAR	#toplvlFork
+			|	JOIN ID SEMI					#toplvlJoin
+			;
+ 	
+//Blocks, as used by statements, do not allow for forks and joins
+block		:	stat*		#blockStatement
+			;
 
 //Statement	
 stat		: 	decl						#statDeclare
@@ -29,10 +39,10 @@ stat		: 	decl						#statDeclare
 // 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block* RBRACE		#statFor
 			|	INPUT ID SEMI				#statInput
 			|	OUTPUT expr SEMI			#statOutput
-			|	LOCK NUM SEMI				#statLock
-			|	UNLOCK NUM SEMI				#statUnlock
-			|	FORK NUM SEMI				#statFork
-			|	JOIN NUM SEMI				#statJoin
+			|	LOCK ID SEMI				#statLock
+			|	UNLOCK ID SEMI				#statUnlock
+			|	FORK ID SEMI				#statFork
+			|	JOIN ID SEMI				#statJoin
  			;
  			
 //Declaration, either with or without an initial value			
@@ -49,7 +59,7 @@ expr		:	LBLOCK expr RBLOCK	#exprBlock
 			|	NOT expr			#exprNot
 			|	expr compOp expr	#exprCompOp
 			|	expr compEqOp expr	#exprCompEqOp
-			|	UP LPAR (NUM COMMA)? ID RPAR		#exprUp
+			|	UP LBLOCK (NUM COMMA)? ID RBLOCK	#exprUp
 			|	ID					#exprID
 			|	NUM					#exprNum
 			|	bool				#exprBool

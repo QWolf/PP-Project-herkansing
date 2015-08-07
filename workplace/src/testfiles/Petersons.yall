@@ -1,0 +1,23 @@
+YALL Petersons
+
+global
+boolean Flag0 is false;
+boolean Flag1 is false;
+integer Turn is 0;
+
+local
+fork P1 (
+	Flag1 is true;
+	Turn is 1;
+	while [ Flag0 and Turn == 0]
+		do {}
+	Flag1 is false;
+)
+
+Flag0 is true;
+Turn is 0;
+while [Flag1 and Turn == 1]
+	do {}
+Flag0 is false;
+
+join P1;

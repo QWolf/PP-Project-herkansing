@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import grammar.YallBaseListener;
 import grammar.YallParser;
 
-public class YallChecker extends YallBaseListener{
+public class YallCheckerLis extends YallBaseListener{
 	private final Map<String, IDTable> threads;
 	private final IDTable globalScope;
 	private IDTable idtable;
@@ -21,7 +21,7 @@ public class YallChecker extends YallBaseListener{
 	private final Map<ParseTree, Type> ctxTypes;
 	private final Map<String, Lock> locks;
 	
-	public YallChecker(){
+	public YallCheckerLis(){
 		this.errors = new ArrayList<String>();
 		this.scopes = new HashMap<ParseTree, IDTable>();
 		this.ctxTypes = new HashMap<ParseTree, Type>();

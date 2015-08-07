@@ -7,11 +7,12 @@ public class IDTable {
 	private int offset;
 	private final IDTable parentscope;
 	private final Map<String, Variable> table = new HashMap<String, Variable>();
+	private final int depth;
 	
-	public IDTable(IDTable parScope, int parentoffset){
+	public IDTable(IDTable parScope, int depth){
 		this.parentscope = parScope;
 		offset = 0;
-		//TODO parentoffset
+		this.depth = depth;
 	}
 	
 	/**
@@ -29,7 +30,6 @@ public class IDTable {
 			Variable var = new Variable(type, offset);
 			offset = offset + 4;
 			table.put(id, var);
-			System.out.println(id + var.getOffset());
 			return null;
 		}
 	}
@@ -58,6 +58,10 @@ public class IDTable {
 	 */
 	public IDTable getParentScope(){
 		return parentscope;
+	}
+
+	public int getDepth() {
+		return depth;
 	}
 
 

@@ -55,6 +55,30 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code toplvlBlock}
+	 * labeled alternative in {@link YallParser#toplevelblock}.
+	 * @param ctx the parse tree
+	 */
+	void enterToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code toplvlBlock}
+	 * labeled alternative in {@link YallParser#toplevelblock}.
+	 * @param ctx the parse tree
+	 */
+	void exitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code toplvlFork}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterToplvlFork(@NotNull YallParser.ToplvlForkContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code toplvlFork}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitToplvlFork(@NotNull YallParser.ToplvlForkContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code statUnlock}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -253,6 +277,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitExprNum(@NotNull YallParser.ExprNumContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code toplvlStat}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterToplvlStat(@NotNull YallParser.ToplvlStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code toplvlStat}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitToplvlStat(@NotNull YallParser.ToplvlStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code typeBool}
 	 * labeled alternative in {@link YallParser#type}.
 	 * @param ctx the parse tree
@@ -392,4 +428,16 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExprBlock(@NotNull YallParser.ExprBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code toplvlJoin}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 */
+	void enterToplvlJoin(@NotNull YallParser.ToplvlJoinContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code toplvlJoin}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 */
+	void exitToplvlJoin(@NotNull YallParser.ToplvlJoinContext ctx);
 }

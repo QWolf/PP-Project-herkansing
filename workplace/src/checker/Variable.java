@@ -2,7 +2,7 @@ package checker;
 
 public class Variable {
 	private final Type type;
-	private int offset;
+	private final int offset;
 
 	public Variable(Type type, int offset) {
 		this.type = type;

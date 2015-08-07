@@ -39,6 +39,20 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code toplvlBlock}
+	 * labeled alternative in {@link YallParser#toplevelblock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code toplvlFork}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitToplvlFork(@NotNull YallParser.ToplvlForkContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code statUnlock}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -155,6 +169,13 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExprNum(@NotNull YallParser.ExprNumContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code toplvlStat}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitToplvlStat(@NotNull YallParser.ToplvlStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code typeBool}
 	 * labeled alternative in {@link YallParser#type}.
 	 * @param ctx the parse tree
@@ -236,4 +257,11 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExprBlock(@NotNull YallParser.ExprBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code toplvlJoin}
+	 * labeled alternative in {@link YallParser#toplevelblockPart}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitToplvlJoin(@NotNull YallParser.ToplvlJoinContext ctx);
 }

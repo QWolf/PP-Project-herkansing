@@ -3,7 +3,6 @@ lexer grammar YallVocab;
 @header{package grammar;}
 
 YALL: 	'YALL';
-SPIDS:	'SPIDS';
 GLOBAL: 'global';
 LOCAL:	'local';
 

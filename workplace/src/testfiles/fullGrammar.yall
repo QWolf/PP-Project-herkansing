@@ -24,8 +24,8 @@ output B2;
 
 if [X] then {
 	integer Z is Y; 
-	Y is up(1, Z);
+	Y is up[1, Z];
 } else {
 	integer Z is 3;
-	Y is up(Z);
+	Y is up[Z];
 } 

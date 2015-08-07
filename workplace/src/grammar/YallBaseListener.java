@@ -65,6 +65,30 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterToplvlFork(@NotNull YallParser.ToplvlForkContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToplvlFork(@NotNull YallParser.ToplvlForkContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStatUnlock(@NotNull YallParser.StatUnlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -269,6 +293,18 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTypeBool(@NotNull YallParser.TypeBoolContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -408,6 +444,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExprBlock(@NotNull YallParser.ExprBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterToplvlJoin(@NotNull YallParser.ToplvlJoinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToplvlJoin(@NotNull YallParser.ToplvlJoinContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
