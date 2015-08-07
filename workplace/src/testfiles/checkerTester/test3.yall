@@ -4,3 +4,7 @@
 
 YALL Test3
 
+integer Int is 12;
+boolean Bool is true;
+
+Int is Bool;

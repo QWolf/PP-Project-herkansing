@@ -13,8 +13,10 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import checker.Type;
 import checker.YallChecker;
 import ast.ASTCompiler;
 import ast.ErrorListener;
@@ -22,7 +24,7 @@ import grammar.YallParser;
 
 public class YallCompiler {
 	
-	private final static ParseTreeWalker walker = new ParseTreeWalker();
+//	private final static ParseTreeVisitor<Type> visitor = new ParseTreeVisitor<Type>();
 //	private final static ASTCompiler listener = new ASTCompiler();
 	private final static YallChecker checker = new YallChecker();
 	private final static ErrorListener errorListener = new ErrorListener();
@@ -71,7 +73,7 @@ public class YallCompiler {
 	 */
 	public void walk(ParseTree tree){
 		System.out.println("Starting typechecking");
-		walker.walk(checker,  tree);
+		checker.visit(tree);
 		System.out.println("Typechecking complete");
 		List<String> errors = checker.getErrors();
 		if(errors.size() != 0){

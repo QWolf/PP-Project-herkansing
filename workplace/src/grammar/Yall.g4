@@ -41,8 +41,6 @@ stat		: 	decl						#statDeclare
 			|	OUTPUT expr SEMI			#statOutput
 			|	LOCK ID SEMI				#statLock
 			|	UNLOCK ID SEMI				#statUnlock
-			|	FORK ID SEMI				#statFork
-			|	JOIN ID SEMI				#statJoin
  			;
  			
 //Declaration, either with or without an initial value			

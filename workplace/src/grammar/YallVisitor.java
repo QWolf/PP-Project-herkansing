@@ -87,13 +87,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatDeclare(@NotNull YallParser.StatDeclareContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code statJoin}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatJoin(@NotNull YallParser.StatJoinContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code statLock}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -201,13 +194,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code statFork}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatFork(@NotNull YallParser.StatForkContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code typeInt}
 	 * labeled alternative in {@link YallParser#type}.

@@ -149,18 +149,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatJoin(@NotNull YallParser.StatJoinContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatJoin(@NotNull YallParser.StatJoinContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatLock(@NotNull YallParser.StatLockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -348,18 +336,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompEqOp(@NotNull YallParser.CompEqOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStatFork(@NotNull YallParser.StatForkContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatFork(@NotNull YallParser.StatForkContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

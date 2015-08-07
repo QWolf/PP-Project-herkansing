@@ -137,18 +137,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitStatDeclare(@NotNull YallParser.StatDeclareContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code statJoin}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void enterStatJoin(@NotNull YallParser.StatJoinContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code statJoin}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void exitStatJoin(@NotNull YallParser.StatJoinContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statLock}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -332,18 +320,6 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code statFork}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void enterStatFork(@NotNull YallParser.StatForkContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code statFork}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void exitStatFork(@NotNull YallParser.StatForkContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code typeInt}
 	 * labeled alternative in {@link YallParser#type}.
