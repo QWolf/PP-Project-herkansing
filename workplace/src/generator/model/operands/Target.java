@@ -1,5 +1,7 @@
 package generator.model.operands;
 
+import java.util.HashMap;
+
 
 public class Target extends Operand {
 	private final TargetType targetType;
@@ -67,9 +69,16 @@ public class Target extends Operand {
 			ret = "(Ind "+ indRegTarget.getCode() + ")";
 		default:
 			ret = "(Abs " + label.getName() + ")";
+			System.err.println("Labels should be called with getCode(Label label) instead");
 			
 		}
 		return ret;
+	}
+	
+	public String getCode(){
+		
+		return null;
+		
 	}
 	
 }

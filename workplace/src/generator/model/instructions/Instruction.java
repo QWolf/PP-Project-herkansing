@@ -1,6 +1,5 @@
 package generator.model.instructions;
 
-import java.util.HashMap;
 
 import generator.model.operands.Label;
 
@@ -12,7 +11,7 @@ public abstract class Instruction {
 	}
 	
 	
-	public abstract String getFullCommand(HashMap<String, Label> labelTable);
+	public abstract String getFullCommand();
 
 
 

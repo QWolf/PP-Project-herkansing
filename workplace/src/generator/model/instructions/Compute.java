@@ -4,8 +4,6 @@ import generator.model.operands.Label;
 import generator.model.operands.OpCode;
 import generator.model.operands.Register;
 
-import java.util.HashMap;
-
 public class Compute extends Instruction{
 	private final OpCode opcode;
 	private final Register reg1;
@@ -30,7 +28,7 @@ public class Compute extends Instruction{
 	
 
 	@Override
-	public String getFullCommand(HashMap<String, Label> labelTable) {
+	public String getFullCommand() {
 		return String.format("Compute %s %s %s %s", OpCode.getName(opcode), reg1.getCode(), reg2.getCode(), reg3.getCode() );
 	}
 

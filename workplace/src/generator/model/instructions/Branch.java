@@ -4,7 +4,6 @@ import generator.model.operands.Label;
 import generator.model.operands.Register;
 import generator.model.operands.Target;
 
-import java.util.HashMap;
 
 public class Branch extends Instruction{
 
@@ -23,9 +22,7 @@ public class Branch extends Instruction{
 	}
 
 	@Override
-	public String getFullCommand(HashMap<String, Label> labelTable) {
-		
-		
-		return null;
+	public String getFullCommand() {		
+		return String.format("Branch %s %s", reg.getCode(), target.getCode());
 	}
 }

@@ -1,7 +1,5 @@
 package generator.model.instructions;
 
-import java.util.HashMap;
-
 import generator.model.operands.Label;
 import generator.model.operands.Register;
 import generator.model.operands.Value;
@@ -22,7 +20,7 @@ public class Constant extends Instruction{
 
 
 	@Override
-	public String getFullCommand(HashMap<String, Label> labelTable) {
+	public String getFullCommand() {
 		return String.format("Const %s %s", value, reg.getCode());
 	}
 
