@@ -1,5 +1,8 @@
 !@
-!	Errortesting
+!	Correct Code
+!	Decl&Assign
+!	Incorrect Code
+!	Assign bool to int
 @!
 
 YALL Test3
@@ -8,3 +11,5 @@ integer Int is 12;
 boolean Bool is true;
 
 Int is Bool;
+
+

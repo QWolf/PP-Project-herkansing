@@ -3,7 +3,6 @@ package main;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -12,20 +11,12 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
-import checker.Type;
 import checker.YallChecker;
-import ast.ASTCompiler;
-import ast.ErrorListener;
+import grammar.ErrorListener;
 import grammar.YallParser;
 
 public class YallCompiler {
 	
-//	private final static ParseTreeVisitor<Type> visitor = new ParseTreeVisitor<Type>();
-//	private final static ASTCompiler listener = new ASTCompiler();
 	private final static YallChecker checker = new YallChecker();
 	private final static ErrorListener errorListener = new ErrorListener();
 	
@@ -50,8 +41,8 @@ public class YallCompiler {
 			System.out.println("Started parsing");
 			ParseTree tree = parser.program();
 			System.out.println("Finished parsing");
-			if(errorListener.getErrors().size() != 0) {
-				System.err.println("Errors: "+ errorListener.getErrors().size());
+			if(errorListener.hasErrors()) {
+				System.err.println(String.format("%d errors found in parse phase: ", errorListener.getErrors().size()));
 				for(String error : errorListener.getErrors()){
 					System.err.println(error);
 				}
@@ -77,6 +68,7 @@ public class YallCompiler {
 		System.out.println("Typechecking complete");
 		List<String> errors = checker.getErrors();
 		if(errors.size() != 0){
+			System.err.println(String.format("%d errors found in Typecheck phase: ", errors.size()));
 			for(String error : errors){
 				System.err.println(error);
 			}
