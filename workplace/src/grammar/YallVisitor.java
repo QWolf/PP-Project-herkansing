@@ -80,6 +80,13 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolTrue(@NotNull YallParser.BoolTrueContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code statOutputInt}
+	 * labeled alternative in {@link YallParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code statDeclare}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -176,13 +183,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypeBool(@NotNull YallParser.TypeBoolContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code statOutput}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatOutput(@NotNull YallParser.StatOutputContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link YallParser#compOp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -194,6 +194,13 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code statOutputBool}
+	 * labeled alternative in {@link YallParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code typeInt}
 	 * labeled alternative in {@link YallParser#type}.

@@ -10,12 +10,14 @@ import java.util.Map;
 
 public class Program {
 	
-	private final Map<String, Integer> labelTable;
+	private final Map<Label, Integer> labelTable;
 	private final List<Instruction> instructions;
+	private final String name;
 	
-	public Program(){
+	public Program(String name){
 		this.instructions = new ArrayList<Instruction>();
-		this.labelTable = new HashMap<String, Integer>();
+		this.labelTable = new HashMap<Label, Integer>();
+		this.name = name;
 	}
 	
 	
@@ -27,13 +29,19 @@ public class Program {
 	public void buildLabelTable(){
 		labelTable.clear();
 		for(int i = 0; i < instructions.size(); i++){
+			
 			if(instructions.get(i).hasLabel()){
-				labelTable.put(instructions.get(i).getLabel().getName(), i);
+				Label label = instructions.get(i).getLabel();
+				if(!labelTable.containsKey(label)){
+					labelTable.put(label, i);
+				} else {
+					System.err.println("Double label : " + label.getName());
+				}
 			}
 		}
 	}
 	
-	public Map<String, Integer> getLabelTable(){
+	public Map<Label, Integer> getLabelTable(){
 		return labelTable;
 	}
 	
@@ -46,6 +54,10 @@ public class Program {
 		answer = answer + "Endprogram]";
 		System.out.println(answer);
 		return answer;
+	}
+	
+	public String getProgramName(){
+		return name;
 	}
 
 }

@@ -1,38 +1,38 @@
 package checker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.ParseTree;
-
-import grammar.YallBaseListener;
 import grammar.YallBaseVisitor;
 import grammar.YallParser;
 import grammar.YallParser.BlockContext;
 import grammar.YallParser.DeclContext;
 import grammar.YallParser.ToplevelblockPartContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 public class YallChecker extends YallBaseVisitor<Type>{
-	private final Map<String, IDTable> threads;
+	//List of all threads created by 'Fork'. SPID 0 is not in this list
+	private final Map<String, Integer> threads;
 	private IDTable globalScope;
 	private IDTable idtable;
 	private final Map<ParseTree, IDTable> scopes;
 	private final List<String> errors;
 	private final Map<String, Lock> locks;
+	private int nextSPID;
 	
 	private Map<String, String> unknownForks = new HashMap<String, String>();
-	private Map<String, String> unknownLocks = new HashMap<String, String>();
 	
 	public YallChecker(){
 		this.errors = new ArrayList<String>();
 		this.scopes = new HashMap<ParseTree, IDTable>();
 		this.locks = new HashMap<String, Lock>();
 		this.globalScope = new IDTable(null, 0);
-		this.threads = new HashMap<String, IDTable>();
+		this.threads = new HashMap<String, Integer>();
+		nextSPID = 1;
 		
 	}
 	
@@ -62,6 +62,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		for(ToplevelblockPartContext tlbpc : ctx.toplevelblockPart()){
 			visit(tlbpc);
 		}
+		scopes.put(ctx, idtable);
 		return null;
 	}
 	
@@ -72,7 +73,8 @@ public class YallChecker extends YallBaseVisitor<Type>{
 			addError(ctx.start.getLine(), String.format("Thread %s already exists and thus cannot be created", ctx.ID().getText()));
 		} else {
 			visitChildren(ctx);
-			threads.put(ctx.ID().getText(), idtable);
+			threads.put(ctx.ID().getText(), nextSPID);
+			nextSPID++;
 		}
 		idtable = oldIDTable;
 		return null;
@@ -149,16 +151,22 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		return null;
 	}
 	
-	@Override public Type visitStatOutput(@NotNull YallParser.StatOutputContext ctx) { 
-		if(visit(ctx.expr()) == Type.ERROR){
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an outputtable value", ctx.expr().getText()));
+	@Override public Type visitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { 
+		if(visit(ctx.expr()) != Type.INTEGER){
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer", ctx.expr().getText()));
+		}
+		return null;
+	}
+	
+	@Override public Type visitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { 
+		if(visit(ctx.expr()) != Type.BOOLEAN){
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.expr().getText()));
 		}
 		
 		//TODO store output type
 		return null;
 	}
 
-	//TODO locks
 	@Override public Type visitStatLock(@NotNull YallParser.StatLockContext ctx) { 
 		String id = ctx.ID().getText();
 		if(!locks.containsKey(id)){
@@ -171,6 +179,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	@Override public Type visitStatUnlock(@NotNull YallParser.StatUnlockContext ctx) { 
 		String id = ctx.ID().getText();
 		//A lock should always be locked in the same thread before an unlock is possible
+		//therefor it should always exist
 		if(!locks.containsKey(id)){
 			addError(ctx.start.getLine(), String.format("Lock %s does not appear earlier in code, therefor cannot be locked at this point", id));
 		}
@@ -338,7 +347,10 @@ public class YallChecker extends YallBaseVisitor<Type>{
 				addError(0, unknownForks.get(x));
 			}
 		}
-		
+	}
+	
+	public Map<String, Integer> getThreads(){
+		return threads;
 	}
 
 }

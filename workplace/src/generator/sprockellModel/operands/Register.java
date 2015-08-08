@@ -1,6 +1,7 @@
 package generator.sprockellModel.operands;
 
 public class Register extends Operand {
+
 	private final String name;
 
 	public Register(String name) {

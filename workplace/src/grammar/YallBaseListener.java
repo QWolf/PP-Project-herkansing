@@ -137,6 +137,18 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStatDeclare(@NotNull YallParser.StatDeclareContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -305,18 +317,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatOutput(@NotNull YallParser.StatOutputContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatOutput(@NotNull YallParser.StatOutputContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterCompOp(@NotNull YallParser.CompOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -336,6 +336,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompEqOp(@NotNull YallParser.CompEqOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -20,7 +20,8 @@ DO:		'do';
 NONE: 	'none';
 UP: 	'up';
 INPUT: 	'input';
-OUTPUT:	'output';
+OUTPUTBOOL:	'outputBoolean';
+OUTPUTINT:	'outputInt';
 
 //Types
 INTEGER: 	'integer';

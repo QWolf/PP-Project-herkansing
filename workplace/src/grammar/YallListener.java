@@ -125,6 +125,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitBoolTrue(@NotNull YallParser.BoolTrueContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code statOutputInt}
+	 * labeled alternative in {@link YallParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code statOutputInt}
+	 * labeled alternative in {@link YallParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code statDeclare}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -289,18 +301,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitTypeBool(@NotNull YallParser.TypeBoolContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code statOutput}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void enterStatOutput(@NotNull YallParser.StatOutputContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code statOutput}
-	 * labeled alternative in {@link YallParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void exitStatOutput(@NotNull YallParser.StatOutputContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link YallParser#compOp}.
 	 * @param ctx the parse tree
 	 */
@@ -320,6 +320,18 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code statOutputBool}
+	 * labeled alternative in {@link YallParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code statOutputBool}
+	 * labeled alternative in {@link YallParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code typeInt}
 	 * labeled alternative in {@link YallParser#type}.

@@ -3,7 +3,7 @@ package generator.sprockellModel.operands;
 public class Operator extends Operand{
 	private final OpCode opcode;
 
-	protected Operator(ArgType type, OpCode opcode) {
+	public Operator(OpCode opcode) {
 		super(ArgType.OPERATOR);
 		this.opcode = opcode;
 	}

@@ -19,6 +19,7 @@ init		:  GLOBAL decl* LOCAL
 //Program Blocks, single statements, every block has it's own scope level	
 			
 // The top level of the program is the only level where forks and joins are allowed
+// Toplevelblocks are only started by new Threads
 toplevelblock: 	toplevelblockPart*				#toplvlBlock
 			;
 
@@ -38,7 +39,8 @@ stat		: 	decl						#statDeclare
  			|	WHILE LBLOCK expr RBLOCK DO LBRACE block RBRACE 					#statWhile
 // 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block* RBRACE		#statFor
 			|	INPUT ID SEMI				#statInput
-			|	OUTPUT expr SEMI			#statOutput
+			|	OUTPUTBOOL expr SEMI		#statOutputBool
+			|	OUTPUTINT expr SEMI			#statOutputInt
 			|	LOCK ID SEMI				#statLock
 			|	UNLOCK ID SEMI				#statUnlock
  			;
@@ -58,6 +60,7 @@ expr		:	LBLOCK expr RBLOCK	#exprBlock
 			|	expr compOp expr	#exprCompOp
 			|	expr compEqOp expr	#exprCompEqOp
 			|	UP LBLOCK (NUM COMMA)? ID RBLOCK	#exprUp
+//			|	GLOBAL ID
 			|	ID					#exprID
 			|	NUM					#exprNum
 			|	bool				#exprBool
