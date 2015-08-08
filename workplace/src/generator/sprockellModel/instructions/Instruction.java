@@ -1,7 +1,7 @@
-package generator.model.instructions;
+package generator.sprockellModel.instructions;
 
 
-import generator.model.operands.Label;
+import generator.sprockellModel.operands.Label;
 
 public abstract class Instruction {
 	private Label label;
@@ -15,11 +15,13 @@ public abstract class Instruction {
 
 
 
+	public boolean hasLabel(){
+		return label != null;
+	}
+	
 	public Label getLabel() {
 		return label;
 	}
-
-
 
 	public void setLabel(Label label) {
 		this.label = label;

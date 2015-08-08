@@ -1,4 +1,6 @@
-package generator.model.operands;
+package generator.sprockellModel.operands;
+
+import java.util.HashMap;
 
 public abstract class Operand {
 	private final ArgType type;

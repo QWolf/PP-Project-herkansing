@@ -1,4 +1,4 @@
-package generator.model.operands;
+package generator.sprockellModel.operands;
 
 public class Value extends Operand {
 	private final int value;
@@ -10,6 +10,11 @@ public class Value extends Operand {
 	
 	public int getValue(){
 		return value;
+	}
+
+	@Override
+	public String getCode() {
+		return Integer.toString(value);
 	}
 
 }

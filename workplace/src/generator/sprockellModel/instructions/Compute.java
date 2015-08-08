@@ -1,8 +1,8 @@
-package generator.model.instructions;
+package generator.sprockellModel.instructions;
 
-import generator.model.operands.Label;
-import generator.model.operands.OpCode;
-import generator.model.operands.Register;
+import generator.sprockellModel.operands.Label;
+import generator.sprockellModel.operands.OpCode;
+import generator.sprockellModel.operands.Register;
 
 public class Compute extends Instruction{
 	private final OpCode opcode;

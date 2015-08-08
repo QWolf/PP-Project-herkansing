@@ -1,4 +1,4 @@
-package generator.model;
+package generator.sprockellModel;
 
 public class RegisterManager {
 //TODO this

@@ -1,6 +1,9 @@
-package generator.model.operands;
+package generator.sprockellModel.operands;
+
+import generator.sprockellModel.Program;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class Target extends Operand {
@@ -8,13 +11,24 @@ public class Target extends Operand {
 	private Register indRegTarget;
 	private Label label;
 	private int codeAddr;
+	private Program program;
 	
-	public Target(Label label){
+	
+	/*
+	 * Jump to label, Program is provided to access the labelTable later on
+	 */
+	public Target(Program p, Label goalLabel){
 		super(ArgType.TARGET);
-		this.targetType = TargetType.ABSOLUTE;
-		this.label = label;
+		this.targetType = TargetType.LABEL;
+		this.label = goalLabel;
+		this.program = program;
 	}
 	
+	
+	/*
+	 * Absolute jump if bool = true, Relative jump otherwise.
+	 * Goal = codeAddr
+	 */
 	public Target(int codeAddr, boolean absolute){
 		super(ArgType.TARGET);
 		if(absolute){
@@ -24,7 +38,7 @@ public class Target extends Operand {
 		}
 	}
 	
-	public Target(Register reg){
+	public Target(Label label, Register reg){
 		super(ArgType.TARGET);
 		this.targetType = TargetType.INDIRECT;
 	}
@@ -55,8 +69,7 @@ public class Target extends Operand {
 
 
 
-	@Override
-	public String getCode() {
+		public String getCode() {
 		String ret;
 		switch(targetType){
 		case ABSOLUTE: 
@@ -67,18 +80,17 @@ public class Target extends Operand {
 			break;	
 		case INDIRECT:
 			ret = "(Ind "+ indRegTarget.getCode() + ")";
-		default:
-			ret = "(Abs " + label.getName() + ")";
-			System.err.println("Labels should be called with getCode(Label label) instead");
-			
+			break;
+		case LABEL:
+			Map<String, Integer> labelTable = program.getLabelTable();
+			ret = "(Abs " + labelTable.get(label.getName()) + ")";			
+			break;
+		default :
+			System.err.println("Unknown Target Type");
+			ret = "(Abs ??)";
+			break;
 		}
 		return ret;
-	}
-	
-	public String getCode(){
-		
-		return null;
-		
 	}
 	
 }

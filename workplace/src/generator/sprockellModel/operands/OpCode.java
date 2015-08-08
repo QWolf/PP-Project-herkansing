@@ -1,4 +1,4 @@
-package generator.model.operands;
+package generator.sprockellModel.operands;
 
 public enum OpCode {
 	ADD, SUB, MUL, DIV, MOD,

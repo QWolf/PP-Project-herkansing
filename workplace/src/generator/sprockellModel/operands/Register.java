@@ -1,4 +1,4 @@
-package generator.model.operands;
+package generator.sprockellModel.operands;
 
 public class Register extends Operand {
 	private final String name;

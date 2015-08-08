@@ -1,8 +1,8 @@
-package generator.model.instructions;
+package generator.sprockellModel.instructions;
 
-import generator.model.operands.Label;
-import generator.model.operands.Register;
-import generator.model.operands.Target;
+import generator.sprockellModel.operands.Label;
+import generator.sprockellModel.operands.Register;
+import generator.sprockellModel.operands.Target;
 
 
 public class Branch extends Instruction{
