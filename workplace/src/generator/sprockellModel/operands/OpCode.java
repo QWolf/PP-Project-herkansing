@@ -71,7 +71,7 @@ public enum OpCode {
 			s = "ERROR";
 			System.err.println("Undefined operator. This should not happen!");
 		}
-		return null;
+		return s;
 		
 	}
 }

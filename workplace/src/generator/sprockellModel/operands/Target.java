@@ -2,7 +2,6 @@ package generator.sprockellModel.operands;
 
 import generator.sprockellModel.Program;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -21,7 +20,7 @@ public class Target extends Operand {
 		super(ArgType.TARGET);
 		this.targetType = TargetType.LABEL;
 		this.label = goalLabel;
-		this.program = program;
+		this.program = p;
 	}
 	
 	
@@ -38,7 +37,7 @@ public class Target extends Operand {
 		}
 	}
 	
-	public Target(Label label, Register reg){
+	public Target(Register reg){
 		super(ArgType.TARGET);
 		this.targetType = TargetType.INDIRECT;
 	}
