@@ -23,8 +23,15 @@ public class Program {
 	
 	
 	public void addInstruction(Label l, Instruction i){
-		
+		i.setLabel(l);
+		addInstruction(i);
 	}
+	
+	public void addInstruction(Instruction i){
+		instructions.add(i);
+	}
+	
+	
 	
 	public void buildLabelTable(){
 		labelTable.clear();
@@ -59,5 +66,6 @@ public class Program {
 	public String getProgramName(){
 		return name;
 	}
+
 
 }

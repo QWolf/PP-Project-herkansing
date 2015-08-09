@@ -18,7 +18,17 @@ public class Constant extends Instruction{
 		this(null, value, reg);
 		}
 
-
+	public Constant(Label label, int value, Register reg){
+		super(label);
+		this.value = new Value(value);
+		this.reg = reg;
+	}
+	
+	public Constant( int value, Register reg){
+		this(null, value, reg);
+		}
+	
+	
 	@Override
 	public String getFullCommand() {
 		return String.format("Const %s %s", value, reg.getCode());

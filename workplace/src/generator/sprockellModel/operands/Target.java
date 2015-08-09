@@ -81,7 +81,7 @@ public class Target extends Operand {
 			ret = "(Ind "+ indRegTarget.getCode() + ")";
 			break;
 		case LABEL:
-			Map<String, Integer> labelTable = program.getLabelTable();
+			Map<Label, Integer> labelTable = program.getLabelTable();
 			ret = "(Abs " + labelTable.get(label.getName()) + ")";			
 			break;
 		default :
