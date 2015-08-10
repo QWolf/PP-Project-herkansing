@@ -4,14 +4,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IDTable {
+	/*
+	 * A table that stores one scope level worth of identifiers. 
+	 */
+	
+	//Offset for next variable
 	private int offset;
+	//Scope above the current scope
 	private final IDTable parentscope;
+	//Table of all variablenames in the current scope, accompanied by their Variable Object
 	private final Map<String, Variable> table = new HashMap<String, Variable>();
+	//Depth of current scope (Global = 0, Thread main Scope = 1)
 	private final int depth;
 	
-	public IDTable(IDTable parScope, int depth){
+	public IDTable(IDTable parScope, int depth, int tableOffset){
 		this.parentscope = parScope;
-		offset = 0;
+		offset = tableOffset;
 		this.depth = depth;
 	}
 	
@@ -34,7 +42,11 @@ public class IDTable {
 		}
 	}
 	
-	
+	/**
+	 * Checks if a variable exists in the current scope level
+	 * @param id variable name to check
+	 * @return true if name exists in this scope
+	 */
 	public boolean existsCurrentScope(String id){
 		return table.containsKey(id);
 	}
@@ -62,6 +74,10 @@ public class IDTable {
 
 	public int getDepth() {
 		return depth;
+	}
+
+	public int getOffset() {
+		return offset;
 	}
 
 

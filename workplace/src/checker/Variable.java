@@ -1,6 +1,9 @@
 package checker;
 
 public class Variable {
+	/*
+	 *	Variable, with it's respective type and offset 
+	 */
 	private final Type type;
 	private final int offset;
 

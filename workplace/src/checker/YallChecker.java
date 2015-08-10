@@ -15,22 +15,38 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class YallChecker extends YallBaseVisitor<Type>{
+	/*
+	 * Type Checker for the YALL-language. 
+	 */
+	
 	//List of all threads created by 'Fork'. SPID 0 is not in this list
 	private final Map<String, Integer> threads;
+	
+	//Scopes, the global scope, the current focus and the table of all Scopes
 	private IDTable globalScope;
 	private IDTable idtable;
 	private final Map<ParseTree, IDTable> scopes;
-	private final List<String> errors;
-	private final Map<String, Lock> locks;
+	
+	//Number that should be appointed to next thread
 	private int nextSPID;
 	
+	//List of joins that are unknown at the time they are checked. These are checked again at the end of the checker
 	private Map<String, String> unknownForks = new HashMap<String, String>();
+	
+	//List of all locks by name
+	private final Map<String, Lock> locks;
+
+	//Error listener
+	private final List<String> errors;
+
+	private String name;
+	
 	
 	public YallChecker(){
 		this.errors = new ArrayList<String>();
 		this.scopes = new HashMap<ParseTree, IDTable>();
 		this.locks = new HashMap<String, Lock>();
-		this.globalScope = new IDTable(null, 0);
+		this.globalScope = new IDTable(null, 0, 0);
 		this.threads = new HashMap<String, Integer>();
 		nextSPID = 1;
 		
@@ -38,16 +54,22 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	
 	@Override public Type visitProgram(@NotNull YallParser.ProgramContext ctx) { 
+		//Program name
+		name = ctx.ID().getText();
+		//Init
 		if(ctx.init() != null){
 			visit(ctx.init());
 		}
+		//Program
 		visit(ctx.toplevelblock());
+		//Check the thread ID's that were unkown
 		checkUnknownForks();
 		return null;
 	}
 
 
 	@Override public Type visitInit(@NotNull YallParser.InitContext ctx) { 
+		//Build the global Scope
 		idtable = globalScope;
 		
 		for(DeclContext decl : ctx.decl()){
@@ -58,7 +80,9 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	}
 
 	@Override public Type visitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { 
-		idtable = new IDTable(globalScope, 1);
+		//Base level of a thread
+		idtable = new IDTable(null, 1, 0);
+		
 		for(ToplevelblockPartContext tlbpc : ctx.toplevelblockPart()){
 			visit(tlbpc);
 		}
@@ -73,6 +97,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 			addError(ctx.start.getLine(), String.format("Thread %s already exists and thus cannot be created", ctx.ID().getText()));
 		} else {
 			visitChildren(ctx);
+			//Register thread in list
 			threads.put(ctx.ID().getText(), nextSPID);
 			nextSPID++;
 		}
@@ -96,15 +121,16 @@ public class YallChecker extends YallBaseVisitor<Type>{
 
 	
 	@Override public Type visitBlockStatement(@NotNull YallParser.BlockStatementContext ctx) { 
-			idtable = new IDTable(idtable, idtable.getDepth() + 1);
-			scopes.put(ctx, idtable);
+		//Every block has it's own Scope level
+		idtable = new IDTable(idtable, idtable.getDepth() + 1, idtable.getOffset());
+		scopes.put(ctx, idtable);
+		
+		for(ParseTree stat : ctx.stat()){
+			visit(stat);
+		}
 			
-			for(ParseTree stat : ctx.stat()){
-				visit(stat);
-			}
-			
-			idtable = idtable.getParentScope();
-			return null;
+		idtable = idtable.getParentScope();
+		return null;
 	}
 
 
@@ -115,11 +141,20 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	@Override public Type visitStatAssign(@NotNull YallParser.StatAssignContext ctx) { 
 		Type exprType = visit(ctx.expr());
+		
+		//Check if variable is in global or local scope
 		Variable id = idtable.getID(ctx.ID().getText());
-		if(id == null){
+		Variable globalID = globalScope.getID(ctx.ID().getText());
+		
+		if(id == null && globalID == null){
+			//Variable exists neither in global nor in local scope
 			addError(ctx.start.getLine(), String.format("Variable %s is not found in scope and thus cannot be assigned to", ctx.ID().getText()));
-		} else if(exprType != id.getType()){
+		} else if(id != null && exprType != id.getType()){
+			//Variable exists in local scope, but has a different type that the expression
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to type %s", ctx.expr().getText(), id.getType()));
+		} else if(globalID.getType() != exprType){
+			//Variable exists in global scope, but has a different type that the expression
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to type %s", ctx.expr().getText(), globalID.getType()));
 		}
 		return null;
 	}
@@ -127,6 +162,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 
 	@Override public Type visitStatIf(@NotNull YallParser.StatIfContext ctx) { 
 		if(visit(ctx.expr()) != Type.BOOLEAN){
+			//expression is not resolvable to boolean
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.expr().getText()));
 		}
 		for(BlockContext block : ctx.block()){
@@ -137,6 +173,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	@Override public Type visitStatWhile(@NotNull YallParser.StatWhileContext ctx) { 
 		if(visit(ctx.expr()) != Type.BOOLEAN){
+			//expression is not resolvable to boolean
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.expr().getText()));
 		}
 		visit(ctx.block());
@@ -145,7 +182,8 @@ public class YallChecker extends YallBaseVisitor<Type>{
 
 	@Override public Type visitStatInput(@NotNull YallParser.StatInputContext ctx) { 
 		Variable id = idtable.getID(ctx.ID().getText());
-		if(id == null){
+		Variable globalID = globalScope.getID(ctx.ID().getText());
+		if(id == null && globalID == null){
 			addError(ctx.start.getLine(), String.format("Variable %s is not found in scope and thus cannot be used as input", ctx.ID().getText()));
 		}	
 		return null;
@@ -153,6 +191,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	@Override public Type visitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { 
 		if(visit(ctx.expr()) != Type.INTEGER){
+			//expression is not resolvable to integer
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer", ctx.expr().getText()));
 		}
 		return null;
@@ -160,10 +199,9 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	@Override public Type visitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { 
 		if(visit(ctx.expr()) != Type.BOOLEAN){
+			//expression is not resolvable to boolean
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.expr().getText()));
 		}
-		
-		//TODO store output type
 		return null;
 	}
 
@@ -191,6 +229,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	@Override public Type visitDeclDecl(@NotNull YallParser.DeclDeclContext ctx) { 
 		String text = idtable.addVariable(visit(ctx.type()), ctx.ID().getText());
 		if(text != null){
+			//return error if idtable gave one back
 			addError(ctx.start.getLine(), text);
 		}
 		return null;
@@ -200,9 +239,11 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		Type type = visit(ctx.type());
 		String text = idtable.addVariable(type, ctx.ID().getText());
 		if(text != null){
+			//return error if idtable gave one back
 			addError(ctx.start.getLine(), text);
 		}
 		if(type != visit(ctx.expr())){
+			//Expression does not resolve to the variables type
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to type %s and thus cannot be assigned", ctx.expr().getText(), type));
 		}
 		return null;
@@ -214,9 +255,11 @@ public class YallChecker extends YallBaseVisitor<Type>{
 
 	@Override public Type visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { 
 		if (visit(ctx.expr(0)) != Type.INTEGER){
+			//Lefthand expression is not resolvable to an integer
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a numerical operator", ctx.expr(0).getText()));
 		}
 		if (visit(ctx.expr(1)) != Type.INTEGER){
+			//Righthand expression is not resolvable to an integer
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a numerical operator", ctx.expr(1).getText()));
 		}
 		return Type.INTEGER;
@@ -224,9 +267,11 @@ public class YallChecker extends YallBaseVisitor<Type>{
 
 	@Override public Type visitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx) { 
 		if (visit(ctx.expr(0)) != Type.BOOLEAN){
+			//Lefthand expression is not resolvable to a boolean
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an boolean, therefor cannot be used with a boolean operator", ctx.expr(0).getText()));
 		}
 		if (visit(ctx.expr(1)) != Type.BOOLEAN){
+			//Righthand expression is not resolvable to a boolean
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an boolean, therefor cannot be used with a boolean operator", ctx.expr(1).getText()));
 		}
 		return Type.BOOLEAN;
@@ -235,6 +280,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	@Override public Type visitExprNot(@NotNull YallParser.ExprNotContext ctx) { 
 		if (visit(ctx.expr()) != Type.BOOLEAN){
+			//Expression is not resolvable to a boolean
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an boolean, cannot be inversed", ctx.expr().getText()));
 		}
 		return Type.BOOLEAN;		
@@ -243,9 +289,11 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	@Override public Type visitExprCompOp(@NotNull YallParser.ExprCompOpContext ctx) { 
 		if (visit(ctx.expr(0)) != Type.INTEGER){
+			//Lefthand expression is not resolvable to an integer
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, sizes cannot be compared" , ctx.expr(0).getText()));
 		}
 		if (visit(ctx.expr(1)) != Type.INTEGER){
+			//Righthand expression is not resolvable to an integer
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, sizes cannot be compared" , ctx.expr(1).getText()));
 		}
 		return Type.BOOLEAN;
@@ -257,53 +305,88 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		Type typeLeft = visit(ctx.expr(0));
 		Type typeRight = visit(ctx.expr(1));
 		if (typeLeft == Type.ERROR){
+			//Lefthand expression is not resolvable to any type
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to any type, equality cannot be checked"  ,ctx.expr(0).getText()));
 		}
 		if (typeRight == Type.ERROR){
+			//Righthand expression is not resolvable to any type
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to any type, equality cannot be checked"  ,ctx.expr(1).getText()));
 		}
 		if(typeLeft != typeRight){
-				addError(ctx.start.getLine(), String.format("%s and %s cannot be resolved to the same type, therefor cannot be compared " ,ctx.expr(0).getText(), ctx.expr(1).getText()));
+			//Expressions are not of the same typage
+			addError(ctx.start.getLine(), String.format("%s and %s cannot be resolved to the same type, therefor cannot be compared " ,ctx.expr(0).getText(), ctx.expr(1).getText()));
 		}
 		return Type.BOOLEAN;
 	}
 	
 	@Override public Type visitExprUp(@NotNull YallParser.ExprUpContext ctx) {
+		//Expression to seek a variable upward from any scope above the current
 		IDTable localIDTable = idtable;
 		int upDepth = 0;
 		if(ctx.NUM() != null){
+			//Argument given, (at least) x scopes above the current one
 			int num = Integer.parseInt(ctx.NUM().getSymbol().getText());
 			upDepth = num;
+			
+			//Go x scopes up
 			while(num > 0 && localIDTable != null){
 				localIDTable = idtable.getParentScope();
 				num--;
 			}
 		} else {
+			//No argument given, seek in any scope except the current one
 			upDepth = 1;
+			
+			//Go one scope up
 			localIDTable = idtable.getParentScope();
 		}
 		
+		if(idtable.getDepth() == upDepth){
+			//If depth should be 0, target scope is the global scope
+			localIDTable = globalScope;
+		}
+		
+		
+		
 		if(localIDTable == null){
+			//No scope exists upDepth levels higher than current scope
 			addError(ctx.start.getLine(), String.format("No scope is found %d levels above %s"  , upDepth, ctx.ID().getText()));
 			return Type.ERROR;
 		} else {
+			//Scope found
 			Variable id = localIDTable.getID(ctx.ID().getText());
-			if(id == null){
+			if(id != null){
+				//Variable found in scope
+				return id.getType();
+			} else {
+				//Variable not found in target scope or up
+				id = globalScope.getID(ctx.ID().getText());
+				if(id != null){
+					//Variable not found in target local scope, but found in global scope
+					return id.getType();
+				} else {
+				//Variable not found in local or global scope
 				addError(ctx.start.getLine(), String.format("Variable %s is not declared %d or more levels higher", ctx.ID().getText(), upDepth));
 				return Type.ERROR;
-			} else {
-				return id.getType();
+				}
 			}
 		}
 	}
 		
 	@Override public Type visitExprID(@NotNull YallParser.ExprIDContext ctx) { 
 		Variable id = idtable.getID(ctx.getText());
-		if(id == null){
+		Variable globalID = globalScope.getID(ctx.ID().getText());
+		
+		if(id != null){
+			//Variable found in local scope
+			return id.getType();
+		} else if(globalID != null){
+			//Variable found in global scope
+			return globalID.getType();	
+		} else {
+			//Variable not found in global or local scope
 			addError(ctx.start.getLine(), String.format("Variable %s is not declared in this or higher scopes", ctx.getText()));
 			return Type.ERROR;
-		} else {
-			return id.getType();
 		}
 	}
 	
@@ -326,7 +409,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	
 	
-	
+	//Add error to the error list
 	private void addError(int line, String text){
 		if(line != 0){
 			errors.add(String.format("Line %d : %s", line, text ));
@@ -338,6 +421,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	public List<String> getErrors(){
 		return errors;
 	}
+	
 	/*
 	 * Checks if the joins that were unknown at the time are defined after all
 	 */
@@ -351,6 +435,24 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 	public Map<String, Integer> getThreads(){
 		return threads;
+	}
+
+
+	public IDTable getGlobalScope() {
+		return globalScope;
+	}
+	
+	public Map<ParseTree, IDTable> getScopes(){
+		return scopes;
+	}
+	
+	public Map<String, Lock> getLocks(){
+		return locks;
+	}
+
+
+	public String getName() {
+		return name;
 	}
 
 }

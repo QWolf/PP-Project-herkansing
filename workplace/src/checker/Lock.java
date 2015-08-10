@@ -1,6 +1,9 @@
 package checker;
 
 public class Lock {
+	/*
+	 * Represent a global Lock, to be claimed by a thread
+	 */
 	
 	private final String id;
 	private final int offset;
@@ -19,10 +22,5 @@ public class Lock {
 	public int getOffset(){
 		return offset;
 	}
-	
-//	public boolean isLocked(){
-//		return locked;
-//	}
-	
 
 }
