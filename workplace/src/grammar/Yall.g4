@@ -54,7 +54,7 @@ decl		:	type ID SEMI			#declDecl
  			
 //Expressions / value
 expr		:	LBLOCK expr RBLOCK	#exprBlock
-			|	expr numOp expr		#exprNumOp
+			|	expr (numOp expr)+	#exprNumOp
 			|	expr boolOp expr	#exprBoolOp
 			|	NOT expr			#exprNot
 			|	expr compOp expr	#exprCompOp
@@ -67,12 +67,24 @@ expr		:	LBLOCK expr RBLOCK	#exprBlock
 			;
 
 
+
+
 // Numerical Operators
-numOp	:	PLUS				
-		|	MINUS				
-		| 	TIMES				
+numOp	:	multOp
+		|	addOp
+		;
+
+
+
+addOp	:	PLUS				
+		|	MINUS	
+		;
+
+multOp	: 	TIMES				
 		|	DIVIDE				
 		;
+		
+		
 		
 // Boolean Operators
 boolOp	:	AND					

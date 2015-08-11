@@ -24,6 +24,8 @@ import generator.sprockellModel.operands.Target;
 import grammar.YallBaseVisitor;
 import grammar.YallParser;
 import grammar.YallParser.DeclContext;
+import grammar.YallParser.StatContext;
+import grammar.YallParser.ToplevelblockPartContext;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -165,10 +167,9 @@ public class Generator extends YallBaseVisitor<Register>{
 
 		registers.clearRegister(reg1);
 
-		
-		
-		
 		visit(ctx.toplevelblock());
+		
+		
 		return null; 
 	}
 	
@@ -188,7 +189,6 @@ public class Generator extends YallBaseVisitor<Register>{
 			visit(decl);
 		}
 
-		
 		init = false;
 		idtable = null;
 		return null; 
@@ -199,25 +199,94 @@ public class Generator extends YallBaseVisitor<Register>{
 	 * 	------------TOPLEVELBLOCK--------------
 	 */
 	
-	@Override public Integer visitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { 	
+	@Override public Register visitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { 	
+		IDTable oldScope = idtable;
+		idtable = scopes.get(ctx);
+		for(ToplevelblockPartContext tlbp : ctx.toplevelblockPart()){
+			visit(tlbp);
+		}
 		
-		return visitChildren(ctx); 
+		idtable = oldScope;
+		
+		return null; 
 	}
 
-	@Override public Integer visitToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { 
-		return visitChildren(ctx); 
+	@Override public Register visitToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { 
+		visit(ctx.stat());
+		return null; 
 	}
 
-	@Override public Integer visitToplvlFork(@NotNull YallParser.ToplvlForkContext ctx) { 
-		return visitChildren(ctx); 
+	@Override public Register visitToplvlFork(@NotNull YallParser.ToplvlForkContext ctx) { 
+		Register reg1 = registers.getFreeRegister();
+		Register reg2 = registers.getFreeRegister();
+		int threadID = checker.getThreads().get(ctx.ID().getText());
+		
+		Label fork = new Label("Fork" + threadID);
+		threadID++;
+		Label nextFork = new Label("Fork" + threadID);
+		
+		//If SPID =/= Thread ID, go to next fork
+		addInstruction(fork, new Constant(threadID, reg1));
+		addInstruction(new Compute(OpCode.NEQUAL, reg1, reg_spid, reg2));
+		addInstruction(new Branch(reg2, new Target(program, nextFork)));
+		
+		//Wait for ThreadMayStart flag to be 1
+		addInstruction(new Constant(1, reg1));
+		
+		//Read ThreadMayStart flag
+		addInstruction(new Read(new MemAddr(threadID)));
+		addInstruction(new Receive(reg2));
+		
+		//If ThreadMayStart != 1, read again
+		addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg2));
+		addInstruction(new Branch(reg2, new Target(-3, false)));
+		
+		
+		registers.clearRegister(reg1);
+		registers.clearRegister(reg2);
+		
+		
+		return null; 
 	}
 
-	@Override public Integer visitToplvlJoin(@NotNull YallParser.ToplvlJoinContext ctx) { 
-		return visitChildren(ctx); 
+	@Override public Register visitToplvlJoin(@NotNull YallParser.ToplvlJoinContext ctx) { 
+		
+		Register reg1 = registers.getFreeRegister();
+		Register reg2 = registers.getFreeRegister();
+		Register reg3 = registers.getFreeRegister();
+		int threadID = checker.getThreads().get(ctx.ID().getText());
+		
+		addInstruction(new Constant(2, reg2));
+		
+		//Get HasEnded flag
+		addInstruction(new Label("Join" + labelCount), new Read(new MemAddr(threadID)));
+		addInstruction(new Receive(reg1));
+		
+		//If HasEnded is not true, retry
+		addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg3));
+		addInstruction(new Branch(reg3, new Target(-3, false)));
+				
+		labelCount++;
+		registers.clearRegister(reg1);
+		registers.clearRegister(reg2);
+		registers.clearRegister(reg3);
+		return null; 
 	}
 	/*
 	 * 	------------BLOCK---------------------
 	 */
+	
+	@Override public Register visitBlockStatement(@NotNull YallParser.BlockStatementContext ctx) { 
+		IDTable oldScope = idtable;
+		idtable = scopes.get(ctx);
+		for(StatContext stat : ctx.stat()){
+			visit(stat);
+		}
+	
+		idtable = oldScope;
+		return null; 
+	}
+	
 	
 	/*
 	 * 	------------STATEMENT-----------------
@@ -257,7 +326,45 @@ public class Generator extends YallBaseVisitor<Register>{
 		return null; 
 	}
 	
-	@Override public T visitStatIf(@NotNull YallParser.StatIfContext ctx) { return visitChildren(ctx); }
+	@Override public Register visitStatIf(@NotNull YallParser.StatIfContext ctx) { 
+		Label elsE = new Label("IfElse" + labelCount);
+		Label end = new Label("IfEnd" + labelCount);
+		
+		
+		//--If Condition
+		Register reg1 = visit(ctx.expr());
+		
+		//If Expr = 1 (= true) -> Then part
+		//if Expr = 0 (= false) -> Else part (if exits)
+		addInstruction(new Branch(reg1, new Target(2, false)));
+		addInstruction(new Jump(new Target(program, elsE)));
+		if(!reg1.equals(reg_zero)){
+			registers.clearRegister(reg1);
+		}
+		
+		//-- If Then
+		visit(ctx.block(0));
+		
+		if(ctx.block().size() == 2){
+			//Elsepart
+			
+			//Send thenpart to end of the if-Statement
+			addInstruction(new Jump(new Target(program, end)));
+
+			addInstruction(elsE, new Nop());
+			visit(ctx.block(1));
+			addInstruction(end, new Nop());
+	
+			
+		} else {
+			//No Elsepart
+			addInstruction(elsE, new Nop());
+		}
+		
+		labelCount++;
+		return null; 
+		
+	}
 
 	@Override public Register visitStatWhile(@NotNull YallParser.StatWhileContext ctx) { 
 		
@@ -305,7 +412,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		Register reg1 = registers.getFreeRegister();
 		
 		//lockAddress = flag isOwned
-		//lockAddress = SPID of owner
+		//lockAddress + 1 = SPID of owner
 		int lockAddress = lockOffset + checker.getLocks().get(ctx.ID().getText()).getOffset();
 		
 		//Try if Lock is free

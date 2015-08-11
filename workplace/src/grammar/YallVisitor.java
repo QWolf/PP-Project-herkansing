@@ -12,19 +12,19 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code exprNumOp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code exprCompEqOp}
 	 * labeled alternative in {@link YallParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exprNumOp}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link YallParser#numOp}.
 	 * @param ctx the parse tree
@@ -72,6 +72,12 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStatWhile(@NotNull YallParser.StatWhileContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link YallParser#multOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultOp(@NotNull YallParser.MultOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code boolTrue}
 	 * labeled alternative in {@link YallParser#bool}.
@@ -161,6 +167,12 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolFalse(@NotNull YallParser.BoolFalseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link YallParser#addOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddOp(@NotNull YallParser.AddOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code exprNum}
 	 * labeled alternative in {@link YallParser#expr}.

@@ -17,18 +17,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -36,6 +24,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -120,6 +120,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatWhile(@NotNull YallParser.StatWhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultOp(@NotNull YallParser.MultOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultOp(@NotNull YallParser.MultOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -276,6 +288,18 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAddOp(@NotNull YallParser.AddOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAddOp(@NotNull YallParser.AddOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

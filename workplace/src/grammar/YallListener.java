@@ -9,18 +9,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface YallListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by the {@code exprNumOp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code exprNumOp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code exprCompEqOp}
 	 * labeled alternative in {@link YallParser#expr}.
 	 * @param ctx the parse tree
@@ -32,6 +20,18 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exprNumOp}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exprNumOp}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link YallParser#numOp}.
 	 * @param ctx the parse tree
@@ -112,6 +112,16 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatWhile(@NotNull YallParser.StatWhileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link YallParser#multOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultOp(@NotNull YallParser.MultOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link YallParser#multOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultOp(@NotNull YallParser.MultOpContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code boolTrue}
 	 * labeled alternative in {@link YallParser#bool}.
@@ -264,6 +274,16 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolFalse(@NotNull YallParser.BoolFalseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link YallParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddOp(@NotNull YallParser.AddOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link YallParser#addOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddOp(@NotNull YallParser.AddOpContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code exprNum}
 	 * labeled alternative in {@link YallParser#expr}.

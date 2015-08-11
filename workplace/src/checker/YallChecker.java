@@ -4,6 +4,7 @@ import grammar.YallBaseVisitor;
 import grammar.YallParser;
 import grammar.YallParser.BlockContext;
 import grammar.YallParser.DeclContext;
+import grammar.YallParser.ExprContext;
 import grammar.YallParser.ToplevelblockPartContext;
 
 import java.util.ArrayList;
@@ -254,13 +255,10 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	}
 
 	@Override public Type visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { 
-		if (visit(ctx.expr(0)) != Type.INTEGER){
-			//Lefthand expression is not resolvable to an integer
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a numerical operator", ctx.expr(0).getText()));
-		}
-		if (visit(ctx.expr(1)) != Type.INTEGER){
-			//Righthand expression is not resolvable to an integer
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a numerical operator", ctx.expr(1).getText()));
+		for(ExprContext expr : ctx.expr()){
+			if (visit(expr) != Type.INTEGER){
+				addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a numerical operator", expr.getText()));
+			}
 		}
 		return Type.INTEGER;
 	}

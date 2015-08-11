@@ -6,6 +6,9 @@ public class Lock {
 	 */
 	
 	private final String id;
+	
+	// 2 * checker.locks.size() 
+	//	-> Offset for IsLocked flag
 	private final int offset;
 	
 	public Lock(String id, int offset){
