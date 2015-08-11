@@ -9,6 +9,7 @@ import generator.sprockellModel.instructions.Compute;
 import generator.sprockellModel.instructions.Constant;
 import generator.sprockellModel.instructions.Instruction;
 import generator.sprockellModel.instructions.Jump;
+import generator.sprockellModel.instructions.Load;
 import generator.sprockellModel.instructions.Nop;
 import generator.sprockellModel.instructions.Read;
 import generator.sprockellModel.instructions.Receive;
@@ -504,6 +505,143 @@ public class Generator extends YallBaseVisitor<Register>{
 	 * 	------------EXPRESSION----------------
 	 * Expressions give back a register with their value inside it
 	 */
+	
+	@Override public Register visitExprBlock(@NotNull YallParser.ExprBlockContext ctx) {	
+		return visit(ctx.expr()); 
+	}
+
+	@Override public T visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { 
+		return visitChildren(ctx); 
+	}
+
+	@Override public Register visitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx) { 
+		Register reg1 = visit(ctx.expr(0));
+		Register reg2 = visit(ctx.expr(1));
+		Register reg3 = registers.getFreeRegister();
+		
+		if(ctx.boolOp().AND() != null){
+			addInstruction(new Compute(OpCode.AND, reg1, reg2, reg3));
+		} else if(ctx.boolOp().OR() != null){
+			addInstruction(new Compute(OpCode.OR, reg1, reg2, reg3));
+		} else if(ctx.boolOp().AND() != null){
+			addInstruction(new Compute(OpCode.XOR, reg1, reg2, reg3));
+		} else {
+			System.err.println(String.format("Boolop %s not found!"));
+		}
+		
+		
+		if(reg1.equals(reg_zero)){
+			registers.clearRegister(reg1);
+		}
+		if(reg2.equals(reg_zero)){
+			registers.clearRegister(reg2);
+		}
+		return reg3; 
+	}
+	
+	@Override public Register visitExprNot(@NotNull YallParser.ExprNotContext ctx) { 
+		Register reg1 = visit(ctx.expr());
+		Register reg2 = registers.getFreeRegister();
+		
+		
+		// A boolean XOR'ed with true equals the opposite boolean
+		addInstruction(new Constant(1, reg2));
+		addInstruction(new Compute(OpCode.XOR, reg1, reg2, reg2));
+
+		
+		if(reg1.equals(reg_zero)){
+			registers.clearRegister(reg1);
+		}
+		return reg2; 
+	}
+
+	@Override public Register visitExprCompOp(@NotNull YallParser.ExprCompOpContext ctx) { 
+		Register reg1 = visit(ctx.expr(0));
+		Register reg2 = visit(ctx.expr(1));
+		Register reg3 = registers.getFreeRegister();
+		
+		if(ctx.compOp().GT() != null){
+			addInstruction(new Compute(OpCode.GT, reg1, reg2, reg3));
+		} else if(ctx.compOp().LT() != null){
+			addInstruction(new Compute(OpCode.LT, reg1, reg2, reg3));
+		} else if(ctx.compOp().GE() != null){
+			addInstruction(new Compute(OpCode.GTE, reg1, reg2, reg3));
+		} else if(ctx.compOp().LE() != null){
+			addInstruction(new Compute(OpCode.LTE, reg1, reg2, reg3));	
+		} else {
+			System.err.println(String.format("CompOp %s not found!"));
+		}
+		
+		
+		if(reg1.equals(reg_zero)){
+			registers.clearRegister(reg1);
+		}
+		if(reg2.equals(reg_zero)){
+			registers.clearRegister(reg2);
+		}
+		return reg3;
+	}
+
+	@Override public Register visitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx) { 
+		Register reg1 = visit(ctx.expr(0));
+		Register reg2 = visit(ctx.expr(1));
+		Register reg3 = registers.getFreeRegister();
+		
+		if(ctx.compEqOp().EQ() != null){
+			addInstruction(new Compute(OpCode.EQUAL, reg1, reg2, reg3));
+		} else if(ctx.compEqOp().NE() != null){
+			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg3));
+		} else {
+			System.err.println(String.format("CompEqOp %s not found!"));
+		}
+		
+		if(reg1.equals(reg_zero)){
+			registers.clearRegister(reg1);
+		}
+		if(reg2.equals(reg_zero)){
+			registers.clearRegister(reg2);
+		}
+		return reg3;
+	}
+
+	@Override public T visitExprUp(@NotNull YallParser.ExprUpContext ctx) { 
+		return visitChildren(ctx); 
+	}
+
+	@Override public Register visitExprID(@NotNull YallParser.ExprIDContext ctx) { 
+		Register reg1 = registers.getFreeRegister();
+		
+		Variable localID = idtable.getID(ctx.ID().getText());
+		if(localID != null){
+			//Variable in local Scope
+			addInstruction(new Load(new MemAddr(localID.getOffset()), reg1));
+		}else{
+			Variable globalID = globalScope.getID(ctx.ID().getText());
+			if(globalID != null){
+				//Variable in Global Scope
+				addInstruction(new Read(new MemAddr(globalVarOffset + globalID.getOffset())));
+				addInstruction(new Receive(reg1));
+			} else {
+				//Variable not found in Global nor local scope, should be caught by the checker!
+				System.err.println(String.format("Variable %s is not found in global or local, should have been caught by the checker", ctx.ID().getText()));
+			}
+		}		
+		return reg1; 
+	}
+
+	@Override public Register visitExprNum(@NotNull YallParser.ExprNumContext ctx) {
+		Register reg1 = registers.getFreeRegister();
+		
+		int value = Integer.parseInt(ctx.NUM().getText());
+		addInstruction(new Constant(value, reg1));
+		
+		return reg1; 
+	}
+
+	@Override public Register visitExprBool(@NotNull YallParser.ExprBoolContext ctx) { 
+		return visit(ctx.bool()); 
+	}
+
 	
 	/*
 	 * 	------------OTHER---------------------
