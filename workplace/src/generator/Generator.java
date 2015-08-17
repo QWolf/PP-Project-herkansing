@@ -32,6 +32,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import checker.IDTable;
+import checker.Type;
 import checker.Variable;
 import checker.YallChecker;
 
@@ -312,7 +313,7 @@ public class Generator extends YallBaseVisitor<Register>{
 			Variable globalID = globalScope.getID(ctx.ID().getText());
 			if(globalID != null){
 				//ID is not found locally, but is found in the global Scope
-				addInstruction(new Write(reg1, new MemAddr(globalID.getOffset())));
+				addInstruction(new Write(reg1, new MemAddr(globalVarOffset + globalID.getOffset())));
 			} else {
 				//ID is found neither locally, nor globally
 				System.err.println(String.format("Variable %s is not found in IDTable, should have been caught by the checker", ctx.ID().getText()));
@@ -510,8 +511,35 @@ public class Generator extends YallBaseVisitor<Register>{
 		return visit(ctx.expr()); 
 	}
 
-	@Override public T visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { 
-		return visitChildren(ctx); 
+	@Override public Register visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { 
+//		Register reg1;
+//		Register reg2;
+//		Register reg3;
+//		
+//		
+//		for(int i = 0; i < ctx.numOp().size(); i++){
+//			if(ctx.numOp(i).addOp() != null){
+//				reg2 = visit(ctx.expr(i + 1));
+//				
+//				
+//				if(ctx.numOp(i + 1).addOp() != null){
+//					
+//					addInstruction(new Compute(OpCode.ADD, reg1, reg2, reg1));
+//				
+//				}else if(ctx.numOp(i).multOp() != null){
+//				
+//				registers.clearRegister(reg2);
+//				
+//				}
+//			}else if(ctx.numOp(i).multOp() != null){
+//				if(ctx.numOp()){
+//					
+//				}
+//				
+//			}
+//		}
+
+		return reg1; 
 	}
 
 	@Override public Register visitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx) { 
@@ -528,8 +556,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		} else {
 			System.err.println(String.format("Boolop %s not found!"));
 		}
-		
-		
+				
 		if(reg1.equals(reg_zero)){
 			registers.clearRegister(reg1);
 		}
@@ -604,8 +631,61 @@ public class Generator extends YallBaseVisitor<Register>{
 		return reg3;
 	}
 
-	@Override public T visitExprUp(@NotNull YallParser.ExprUpContext ctx) { 
-		return visitChildren(ctx); 
+	@Override public Register visitExprUp(@NotNull YallParser.ExprUpContext ctx) {
+		Register reg1 = registers.getFreeRegister();
+		
+		IDTable localIDTable = idtable;
+		
+		int upDepth = 0;
+		if(ctx.NUM() != null){
+			//Argument given, (at least) x scopes above the current one
+			int num = Integer.parseInt(ctx.NUM().getSymbol().getText());
+			upDepth = num;
+			
+			//Go x scopes up
+			while(num > 0 && localIDTable != null){
+				localIDTable = idtable.getParentScope();
+				num--;
+			}
+		} else {
+			//No argument given, seek in any scope except the current one
+			upDepth = 1;
+			
+			//Go one scope up
+			localIDTable = idtable.getParentScope();
+		}
+		
+		if(idtable.getDepth() == upDepth){
+			//If depth should be 0, target scope is the global scope
+			localIDTable = globalScope;
+		}
+		
+		if(localIDTable == null){
+			//No scope exists upDepth levels higher than current scope
+			System.out.println(String.format("No scope is found %d levels above %s. Checker should have caught this"  , upDepth, ctx.ID().getText()));
+			return reg_zero;
+		} else {
+			//Scope found
+			Variable id = localIDTable.getID(ctx.ID().getText());
+			if(id != null){
+				//Variable found in scope
+				addInstruction(new Load(new MemAddr(id.getOffset()), reg1));
+			} else {
+				//Variable not found in target scope or up
+				id = globalScope.getID(ctx.ID().getText());
+				if(id != null){
+					//Variable not found in target local scope, but found in global scope
+					addInstruction(new Read(new MemAddr(globalVarOffset + id.getOffset())));
+					addInstruction(new Receive(reg1));
+					
+				} else {
+				//Variable not found in local or global scope
+				System.out.println(String.format("Variable %s is not declared %d or more levels higher, should have been caught by the checker", ctx.ID().getText(), upDepth));
+				return reg_zero;
+				}
+			}
+		}
+		return reg1; 
 	}
 
 	@Override public Register visitExprID(@NotNull YallParser.ExprIDContext ctx) { 

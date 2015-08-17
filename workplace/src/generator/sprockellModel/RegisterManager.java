@@ -8,6 +8,7 @@ public class RegisterManager {
 	
 	private final Stack<Register> registers;
 	private final Stack<Register> possibleRegisters;
+	private int free = 0;
 
 	public RegisterManager(){
 		this.registers = new Stack<Register>();
@@ -16,6 +17,7 @@ public class RegisterManager {
 		registers.push(new Register("RegC"));
 		registers.push(new Register("RegD"));
 		registers.push(new Register("RegE"));
+		free = 5;
 		possibleRegisters = registers;
 		
 	}
@@ -28,6 +30,7 @@ public class RegisterManager {
 			System.err.println("No registers available");
 			return null;
 		} else{
+			free--;
 			return registers.pop();
 		}
 	}
@@ -39,9 +42,17 @@ public class RegisterManager {
 		if(possibleRegisters.contains(reg)){
 			System.err.println(String.format("Register %s is not allowed to be put on the stack!", reg.getCode()));
 		} else if(!registers.contains(reg)){
-			registers.push(reg);			
+			registers.push(reg);
+			free++;
 		} else {
 			System.err.println(String.format("Register %s is already on the stack!", reg.getCode()));
 		}
+	}
+	
+	/*
+	 * Returns how many free registers are available
+	 */
+	public int free(){
+		return free;
 	}
 }
