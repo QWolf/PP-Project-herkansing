@@ -1,6 +1,6 @@
 !@
 !	Correct code
-!	IF, While, decl & assign
+!	IF, While, decl, output & assign
 @!
 
 YALL Test1
@@ -12,7 +12,7 @@ boolean Right is true;
 
 if [Left == Right]
 then {
-	output false;
+	outputBoolean false;
 	}
 
 !@ 	
@@ -26,7 +26,7 @@ do {
 	if [I << 10] then {
 		I is I plus 1;
 	} else {
-		output I;
+		outputInt I;
 		I is 0;
 		if [not Right] then {
 			Right is true; 

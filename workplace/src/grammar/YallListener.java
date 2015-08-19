@@ -9,51 +9,29 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface YallListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by the {@code exprCompEqOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Enter a parse tree produced by the {@code multExprMultOp}
+	 * labeled alternative in {@link YallParser#multExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	void enterMultExprMultOp(@NotNull YallParser.MultExprMultOpContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code exprCompEqOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Exit a parse tree produced by the {@code multExprMultOp}
+	 * labeled alternative in {@link YallParser#multExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	void exitMultExprMultOp(@NotNull YallParser.MultExprMultOpContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprNumOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Enter a parse tree produced by the {@code baseExprBlock}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
+	void enterBaseExprBlock(@NotNull YallParser.BaseExprBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code exprNumOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Exit a parse tree produced by the {@code baseExprBlock}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link YallParser#numOp}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumOp(@NotNull YallParser.NumOpContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link YallParser#numOp}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumOp(@NotNull YallParser.NumOpContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code exprBoolOp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code exprBoolOp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx);
+	void exitBaseExprBlock(@NotNull YallParser.BaseExprBlockContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code toplvlBlock}
 	 * labeled alternative in {@link YallParser#toplevelblock}.
@@ -101,6 +79,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitProgram(@NotNull YallParser.ProgramContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code multExprParenteses}
+	 * labeled alternative in {@link YallParser#multExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultExprParenteses(@NotNull YallParser.MultExprParentesesContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multExprParenteses}
+	 * labeled alternative in {@link YallParser#multExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultExprParenteses(@NotNull YallParser.MultExprParentesesContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code statWhile}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -147,6 +137,30 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code baseExprID}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBaseExprID(@NotNull YallParser.BaseExprIDContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code baseExprID}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBaseExprID(@NotNull YallParser.BaseExprIDContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code addExprAddOp}
+	 * labeled alternative in {@link YallParser#addExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddExprAddOp(@NotNull YallParser.AddExprAddOpContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code addExprAddOp}
+	 * labeled alternative in {@link YallParser#addExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddExprAddOp(@NotNull YallParser.AddExprAddOpContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code statDeclare}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -158,6 +172,66 @@ public interface YallListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatDeclare(@NotNull YallParser.StatDeclareContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolExprNot}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExprNot(@NotNull YallParser.BoolExprNotContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolExprNot}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExprNot(@NotNull YallParser.BoolExprNotContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolExprBaseExpr}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExprBaseExpr(@NotNull YallParser.BoolExprBaseExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolExprBaseExpr}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExprBaseExpr(@NotNull YallParser.BoolExprBaseExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exprBoolExpr}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exprBoolExpr}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolExprCompEqOpBool}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExprCompEqOpBool(@NotNull YallParser.BoolExprCompEqOpBoolContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolExprCompEqOpBool}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExprCompEqOpBool(@NotNull YallParser.BoolExprCompEqOpBoolContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolExprBoolOp}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExprBoolOp(@NotNull YallParser.BoolExprBoolOpContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolExprBoolOp}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExprBoolOp(@NotNull YallParser.BoolExprBoolOpContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code statLock}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -171,18 +245,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitStatLock(@NotNull YallParser.StatLockContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprUp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprUp(@NotNull YallParser.ExprUpContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code exprUp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprUp(@NotNull YallParser.ExprUpContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statIf}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -195,17 +257,17 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitStatIf(@NotNull YallParser.StatIfContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprCompOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Enter a parse tree produced by the {@code baseExprSub}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprCompOp(@NotNull YallParser.ExprCompOpContext ctx);
+	void enterBaseExprSub(@NotNull YallParser.BaseExprSubContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code exprCompOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Exit a parse tree produced by the {@code baseExprSub}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprCompOp(@NotNull YallParser.ExprCompOpContext ctx);
+	void exitBaseExprSub(@NotNull YallParser.BaseExprSubContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link YallParser#boolOp}.
 	 * @param ctx the parse tree
@@ -251,18 +313,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitDeclAssign(@NotNull YallParser.DeclAssignContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprNot}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprNot(@NotNull YallParser.ExprNotContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code exprNot}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprNot(@NotNull YallParser.ExprNotContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code boolFalse}
 	 * labeled alternative in {@link YallParser#bool}.
 	 * @param ctx the parse tree
@@ -275,6 +325,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitBoolFalse(@NotNull YallParser.BoolFalseContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code baseExprNum}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBaseExprNum(@NotNull YallParser.BaseExprNumContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code baseExprNum}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBaseExprNum(@NotNull YallParser.BaseExprNumContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link YallParser#addOp}.
 	 * @param ctx the parse tree
 	 */
@@ -285,17 +347,41 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitAddOp(@NotNull YallParser.AddOpContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprNum}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Enter a parse tree produced by the {@code boolParanteses}
+	 * labeled alternative in {@link YallParser#boolExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprNum(@NotNull YallParser.ExprNumContext ctx);
+	void enterBoolParanteses(@NotNull YallParser.BoolParantesesContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code exprNum}
+	 * Exit a parse tree produced by the {@code boolParanteses}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolParanteses(@NotNull YallParser.BoolParantesesContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolExprCompOp}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExprCompOp(@NotNull YallParser.BoolExprCompOpContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolExprCompOp}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExprCompOp(@NotNull YallParser.BoolExprCompOpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exprNumExpr}
 	 * labeled alternative in {@link YallParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprNum(@NotNull YallParser.ExprNumContext ctx);
+	void enterExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exprNumExpr}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code toplvlStat}
 	 * labeled alternative in {@link YallParser#toplevelblockPart}.
@@ -341,6 +427,18 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code multExprBaseExpr}
+	 * labeled alternative in {@link YallParser#multExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultExprBaseExpr(@NotNull YallParser.MultExprBaseExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multExprBaseExpr}
+	 * labeled alternative in {@link YallParser#multExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultExprBaseExpr(@NotNull YallParser.MultExprBaseExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code statOutputBool}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -365,17 +463,29 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitTypeInt(@NotNull YallParser.TypeIntContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprBool}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Enter a parse tree produced by the {@code baseExprUp}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprBool(@NotNull YallParser.ExprBoolContext ctx);
+	void enterBaseExprUp(@NotNull YallParser.BaseExprUpContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code exprBool}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Exit a parse tree produced by the {@code baseExprUp}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprBool(@NotNull YallParser.ExprBoolContext ctx);
+	void exitBaseExprUp(@NotNull YallParser.BaseExprUpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code baseExprBool}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBaseExprBool(@NotNull YallParser.BaseExprBoolContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code baseExprBool}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBaseExprBool(@NotNull YallParser.BaseExprBoolContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code statAssign}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -401,18 +511,6 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitDeclDecl(@NotNull YallParser.DeclDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprID}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprID(@NotNull YallParser.ExprIDContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code exprID}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprID(@NotNull YallParser.ExprIDContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statInput}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -425,17 +523,29 @@ public interface YallListener extends ParseTreeListener {
 	 */
 	void exitStatInput(@NotNull YallParser.StatInputContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exprBlock}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Enter a parse tree produced by the {@code addExprMultExpr}
+	 * labeled alternative in {@link YallParser#addExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprBlock(@NotNull YallParser.ExprBlockContext ctx);
+	void enterAddExprMultExpr(@NotNull YallParser.AddExprMultExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code exprBlock}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Exit a parse tree produced by the {@code addExprMultExpr}
+	 * labeled alternative in {@link YallParser#addExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprBlock(@NotNull YallParser.ExprBlockContext ctx);
+	void exitAddExprMultExpr(@NotNull YallParser.AddExprMultExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code baseExprAdd}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBaseExprAdd(@NotNull YallParser.BaseExprAddContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code baseExprAdd}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBaseExprAdd(@NotNull YallParser.BaseExprAddContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code toplvlJoin}
 	 * labeled alternative in {@link YallParser#toplevelblockPart}.

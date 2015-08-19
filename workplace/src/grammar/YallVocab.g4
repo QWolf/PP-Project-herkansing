@@ -43,11 +43,16 @@ COMMA:	',';
 EXCL: 	'!';
 AT:		'@';
 
+//Add/Substract
+ADD:	'+';
+SUB:	'-';
+
 //Numerical operators
 PLUS: 	'plus';
 MINUS: 	'minus';
 TIMES: 	'times';
 DIVIDE: 'div';
+MODULO: 'mod';
 
 //Boolean operators
 AND: 	'and';

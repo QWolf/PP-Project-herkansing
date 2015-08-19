@@ -594,7 +594,11 @@ public class Generator extends YallBaseVisitor<Register>{
 		} else if(ctx.compOp().GE() != null){
 			addInstruction(new Compute(OpCode.GTE, reg1, reg2, reg3));
 		} else if(ctx.compOp().LE() != null){
-			addInstruction(new Compute(OpCode.LTE, reg1, reg2, reg3));	
+			addInstruction(new Compute(OpCode.LTE, reg1, reg2, reg3));		
+		} else if(ctx.compOp().EQ() != null){
+			addInstruction(new Compute(OpCode.EQUAL, reg1, reg2, reg3));
+		} else if(ctx.compOp().NE() != null){
+			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg3));	
 		} else {
 			System.err.println(String.format("CompOp %s not found!"));
 		}

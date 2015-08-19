@@ -35,12 +35,12 @@ block		:	stat*		#blockStatement
 //Statement	
 stat		: 	decl						#statDeclare
  			| 	ID IS expr SEMI				#statAssign
- 			|	IF LBLOCK expr RBLOCK THEN LBRACE block RBRACE (ELSE LBRACE block RBRACE)? #statIf
- 			|	WHILE LBLOCK expr RBLOCK DO LBRACE block RBRACE 					#statWhile
+ 			|	IF LBLOCK boolExpr RBLOCK THEN LBRACE block RBRACE (ELSE LBRACE block RBRACE)? #statIf
+ 			|	WHILE LBLOCK boolExpr RBLOCK DO LBRACE block RBRACE 					#statWhile
 // 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block* RBRACE		#statFor
 			|	INPUT ID SEMI				#statInput
-			|	OUTPUTBOOL expr SEMI		#statOutputBool
-			|	OUTPUTINT expr SEMI			#statOutputInt
+			|	OUTPUTBOOL boolExpr SEMI	#statOutputBool
+			|	OUTPUTINT addExpr SEMI		#statOutputInt
 			|	LOCK ID SEMI				#statLock
 			|	UNLOCK ID SEMI				#statUnlock
  			;
@@ -49,31 +49,42 @@ stat		: 	decl						#statDeclare
 decl		:	type ID SEMI			#declDecl
  			|	type ID IS expr SEMI	#declAssign
  			;
-
-			
- 			
+		
 //Expressions / value
-expr		:	LBLOCK expr RBLOCK	#exprBlock
-			|	expr (numOp expr)+	#exprNumOp
-			|	expr boolOp expr	#exprBoolOp
-			|	NOT expr			#exprNot
-			|	expr compOp expr	#exprCompOp
-			|	expr compEqOp expr	#exprCompEqOp
-			|	UP LBLOCK (NUM COMMA)? ID RBLOCK	#exprUp
-//			|	GLOBAL ID
-			|	ID					#exprID
-			|	NUM					#exprNum
-			|	bool				#exprBool
+expr		:	addExpr				#exprNumExpr
+			| 	boolExpr			#exprBoolExpr
 			;
 
+//Expressions with an Boolean as outcome
+boolExpr	:	LPAR boolExpr RPAR			#boolParanteses
+			|	boolExpr boolOp boolExpr	#boolExprBoolOp
+			|	NOT boolExpr				#boolExprNot
+			|	addExpr compOp addExpr		#boolExprCompOp
+			|	boolExpr compEqOp boolExpr	#boolExprCompEqOpBool
+			|	baseExpr					#boolExprBaseExpr
+			;
 
+//Expressions with an Integer as outcome	
+addExpr		:	addExpr addOp addExpr		#addExprAddOp
+			|	multExpr					#addExprMultExpr
+			;
 
-
-// Numerical Operators
-numOp	:	multOp
-		|	addOp
-		;
-
+multExpr	:	multExpr multOp multExpr	#multExprMultOp
+			|	LPAR addExpr RPAR			#multExprParenteses
+			|	baseExpr					#multExprBaseExpr
+			;
+	
+			
+//Building bits that actually represent a single (static) value
+baseExpr	:	ID									#baseExprID
+//			|	GLOBAL ID							#baseExprGlobalID
+			|	UP LBLOCK (NUM COMMA)? ID RBLOCK	#baseExprUp
+			|	LBLOCK expr RBLOCK					#baseExprBlock
+			|	NUM									#baseExprNum
+			|	bool								#baseExprBool
+			|	baseExpr (ADD)+						#baseExprAdd
+			|	baseExpr (SUB)+						#baseExprSub
+			;
 
 
 addOp	:	PLUS				
@@ -81,7 +92,8 @@ addOp	:	PLUS
 		;
 
 multOp	: 	TIMES				
-		|	DIVIDE				
+		|	DIVIDE
+		|	MODULO				
 		;
 		
 		
@@ -92,14 +104,16 @@ boolOp	:	AND
 		|	XOR				
 		;
 		
-// Comparison Operators
+// Comparison Operators(numbers)
 compOp	:	GT						// Greater Than
 		|	LT						// Less Than
 		|	GE						// GreaterEqual
 		|	LE						// LessEqual
+		|	EQ						// Equal
+		|	NE						// Not Equal
 		;
 		
-// Comparison if equal or not		
+// Equality operators (booleans and numbers)		
 compEqOp	:	EQ
 			|	NE
 			;

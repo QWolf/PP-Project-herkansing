@@ -12,32 +12,19 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code exprCompEqOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Visit a parse tree produced by the {@code multExprMultOp}
+	 * labeled alternative in {@link YallParser#multExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx);
+	T visitMultExprMultOp(@NotNull YallParser.MultExprMultOpContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprNumOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Visit a parse tree produced by the {@code baseExprBlock}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link YallParser#numOp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumOp(@NotNull YallParser.NumOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code exprBoolOp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx);
+	T visitBaseExprBlock(@NotNull YallParser.BaseExprBlockContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code toplvlBlock}
 	 * labeled alternative in {@link YallParser#toplevelblock}.
@@ -66,6 +53,13 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(@NotNull YallParser.ProgramContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code multExprParenteses}
+	 * labeled alternative in {@link YallParser#multExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultExprParenteses(@NotNull YallParser.MultExprParentesesContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code statWhile}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -93,12 +87,61 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code baseExprID}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBaseExprID(@NotNull YallParser.BaseExprIDContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code addExprAddOp}
+	 * labeled alternative in {@link YallParser#addExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddExprAddOp(@NotNull YallParser.AddExprAddOpContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code statDeclare}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStatDeclare(@NotNull YallParser.StatDeclareContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolExprNot}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolExprNot(@NotNull YallParser.BoolExprNotContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolExprBaseExpr}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolExprBaseExpr(@NotNull YallParser.BoolExprBaseExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exprBoolExpr}
+	 * labeled alternative in {@link YallParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolExprCompEqOpBool}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolExprCompEqOpBool(@NotNull YallParser.BoolExprCompEqOpBoolContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolExprBoolOp}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolExprBoolOp(@NotNull YallParser.BoolExprBoolOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statLock}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -107,13 +150,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatLock(@NotNull YallParser.StatLockContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprUp}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprUp(@NotNull YallParser.ExprUpContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code statIf}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -121,12 +157,12 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatIf(@NotNull YallParser.StatIfContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprCompOp}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Visit a parse tree produced by the {@code baseExprSub}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprCompOp(@NotNull YallParser.ExprCompOpContext ctx);
+	T visitBaseExprSub(@NotNull YallParser.BaseExprSubContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link YallParser#boolOp}.
 	 * @param ctx the parse tree
@@ -154,13 +190,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclAssign(@NotNull YallParser.DeclAssignContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprNot}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprNot(@NotNull YallParser.ExprNotContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code boolFalse}
 	 * labeled alternative in {@link YallParser#bool}.
 	 * @param ctx the parse tree
@@ -168,18 +197,39 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolFalse(@NotNull YallParser.BoolFalseContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code baseExprNum}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBaseExprNum(@NotNull YallParser.BaseExprNumContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link YallParser#addOp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAddOp(@NotNull YallParser.AddOpContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprNum}
+	 * Visit a parse tree produced by the {@code boolParanteses}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolParanteses(@NotNull YallParser.BoolParantesesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolExprCompOp}
+	 * labeled alternative in {@link YallParser#boolExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolExprCompOp(@NotNull YallParser.BoolExprCompOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exprNumExpr}
 	 * labeled alternative in {@link YallParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprNum(@NotNull YallParser.ExprNumContext ctx);
+	T visitExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code toplvlStat}
 	 * labeled alternative in {@link YallParser#toplevelblockPart}.
@@ -207,6 +257,13 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompEqOp(@NotNull YallParser.CompEqOpContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code multExprBaseExpr}
+	 * labeled alternative in {@link YallParser#multExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultExprBaseExpr(@NotNull YallParser.MultExprBaseExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code statOutputBool}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -221,12 +278,19 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypeInt(@NotNull YallParser.TypeIntContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprBool}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Visit a parse tree produced by the {@code baseExprUp}
+	 * labeled alternative in {@link YallParser#baseExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprBool(@NotNull YallParser.ExprBoolContext ctx);
+	T visitBaseExprUp(@NotNull YallParser.BaseExprUpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code baseExprBool}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBaseExprBool(@NotNull YallParser.BaseExprBoolContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statAssign}
 	 * labeled alternative in {@link YallParser#stat}.
@@ -242,13 +306,6 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclDecl(@NotNull YallParser.DeclDeclContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprID}
-	 * labeled alternative in {@link YallParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprID(@NotNull YallParser.ExprIDContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code statInput}
 	 * labeled alternative in {@link YallParser#stat}.
 	 * @param ctx the parse tree
@@ -256,12 +313,19 @@ public interface YallVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatInput(@NotNull YallParser.StatInputContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exprBlock}
-	 * labeled alternative in {@link YallParser#expr}.
+	 * Visit a parse tree produced by the {@code addExprMultExpr}
+	 * labeled alternative in {@link YallParser#addExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExprBlock(@NotNull YallParser.ExprBlockContext ctx);
+	T visitAddExprMultExpr(@NotNull YallParser.AddExprMultExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code baseExprAdd}
+	 * labeled alternative in {@link YallParser#baseExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBaseExprAdd(@NotNull YallParser.BaseExprAddContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code toplvlJoin}
 	 * labeled alternative in {@link YallParser#toplevelblockPart}.

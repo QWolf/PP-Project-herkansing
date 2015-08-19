@@ -80,6 +80,10 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		return null;
 	}
 
+	/*
+	 *TOPLVLBLOCK
+	 */
+	
 	@Override public Type visitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { 
 		//Base level of a thread
 		idtable = new IDTable(null, 1, 0);
@@ -135,6 +139,10 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	}
 
 
+	/*
+	 * STATEMENTS
+	 */
+	
 	@Override public Type visitStatDeclare(@NotNull YallParser.StatDeclareContext ctx){
 		visit(ctx.decl());
 		return null;
@@ -147,12 +155,16 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		Variable id = idtable.getID(ctx.ID().getText());
 		Variable globalID = globalScope.getID(ctx.ID().getText());
 		
+		
 		if(id == null && globalID == null){
 			//Variable exists neither in global nor in local scope
 			addError(ctx.start.getLine(), String.format("Variable %s is not found in scope and thus cannot be assigned to", ctx.ID().getText()));
 		} else if(id != null && exprType != id.getType()){
 			//Variable exists in local scope, but has a different type that the expression
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to type %s", ctx.expr().getText(), id.getType()));
+		} else if(id != null && exprType == id.getType()){
+			//Variable exists in local scope and has correct type
+					//No Action
 		} else if(globalID.getType() != exprType){
 			//Variable exists in global scope, but has a different type that the expression
 			addError(ctx.start.getLine(), String.format("%s could not be resolved to type %s", ctx.expr().getText(), globalID.getType()));
@@ -162,9 +174,9 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	
 
 	@Override public Type visitStatIf(@NotNull YallParser.StatIfContext ctx) { 
-		if(visit(ctx.expr()) != Type.BOOLEAN){
+		if(visit(ctx.boolExpr()) != Type.BOOLEAN){
 			//expression is not resolvable to boolean
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.expr().getText()));
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.boolExpr().getText()));
 		}
 		for(BlockContext block : ctx.block()){
 			visit(block);
@@ -173,9 +185,9 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	}
 	
 	@Override public Type visitStatWhile(@NotNull YallParser.StatWhileContext ctx) { 
-		if(visit(ctx.expr()) != Type.BOOLEAN){
+		if(visit(ctx.boolExpr()) != Type.BOOLEAN){
 			//expression is not resolvable to boolean
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.expr().getText()));
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.boolExpr().getText()));
 		}
 		visit(ctx.block());
 		return null;
@@ -191,17 +203,17 @@ public class YallChecker extends YallBaseVisitor<Type>{
 	}
 	
 	@Override public Type visitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { 
-		if(visit(ctx.expr()) != Type.INTEGER){
+		if(visit(ctx.addExpr()) != Type.INTEGER){
 			//expression is not resolvable to integer
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer", ctx.expr().getText()));
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer", ctx.addExpr().getText()));
 		}
 		return null;
 	}
 	
 	@Override public Type visitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { 
-		if(visit(ctx.expr()) != Type.BOOLEAN){
+		if(visit(ctx.boolExpr()) != Type.BOOLEAN){
 			//expression is not resolvable to boolean
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.expr().getText()));
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean", ctx.boolExpr().getText()));
 		}
 		return null;
 	}
@@ -226,6 +238,9 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		
 	}
 
+	/*
+	 * DECLARATIONS
+	 */
 	
 	@Override public Type visitDeclDecl(@NotNull YallParser.DeclDeclContext ctx) { 
 		String text = idtable.addVariable(visit(ctx.type()), ctx.ID().getText());
@@ -250,74 +265,144 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		return null;
 	}
 
-	@Override public Type visitExprBlock(@NotNull YallParser.ExprBlockContext ctx) { 
-		return visit(ctx.expr());
+	
+	/*
+	 * EXPRESSIONS
+	 */
+	
+	@Override public Type visitExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx) { 
+		return visit(ctx.addExpr()); 
 	}
 
-	@Override public Type visitExprNumOp(@NotNull YallParser.ExprNumOpContext ctx) { 
-		for(ExprContext expr : ctx.expr()){
-			if (visit(expr) != Type.INTEGER){
-				addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a numerical operator", expr.getText()));
-			}
+	@Override public Type visitExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx) { 
+		return visit(ctx.boolExpr()); 
+	}	
+	
+	/*
+	 * BOOLEAN EXPRESSIONS
+	 */
+	
+		
+	@Override public Type visitBoolParanteses(@NotNull YallParser.BoolParantesesContext ctx) { 
+		return visit(ctx.boolExpr()); 
+	}
+
+	@Override public Type visitBoolExprBoolOp(@NotNull YallParser.BoolExprBoolOpContext ctx) { 
+		if (visit(ctx.boolExpr(0)) != Type.BOOLEAN){
+			//Lefthand expression is not resolvable to a boolean
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with a boolean operator", ctx.boolExpr(0).getText()));
+		}
+		if (visit(ctx.boolExpr(1)) != Type.BOOLEAN){
+			//Righthand expression is not resolvable to a boolean
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with a boolean operator", ctx.boolExpr(1).getText()));
+		}
+		return Type.BOOLEAN;
+	}
+	
+	@Override public Type visitBoolExprNot(@NotNull YallParser.BoolExprNotContext ctx) { 
+		if (visit(ctx.boolExpr()) != Type.BOOLEAN){
+			//Expression is not resolvable to a boolean
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with NOT", ctx.boolExpr().getText()));
+		}
+		return Type.BOOLEAN;
+	}
+	
+	@Override public Type visitBoolExprCompOp(@NotNull YallParser.BoolExprCompOpContext ctx) { 
+		if (visit(ctx.addExpr(0)) != Type.INTEGER){
+			//Lefthand expression is not resolvable to an integer
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a comparison operator", ctx.addExpr(0).getText()));
+		}
+		if (visit(ctx.addExpr(1)) != Type.INTEGER){
+			//Righthand expression is not resolvable to an integer
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used with a comparison operator", ctx.addExpr(1).getText()));
+		}
+		return Type.BOOLEAN;
+	}
+	
+	
+	@Override public Type visitBoolExprCompEqOpBool(@NotNull YallParser.BoolExprCompEqOpBoolContext ctx) {
+		if (visit(ctx.boolExpr(0)) != Type.BOOLEAN){
+			//Lefthand expression is not resolvable to a boolean
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with an equality operator", ctx.boolExpr(0).getText()));
+		}
+		if (visit(ctx.boolExpr(1)) != Type.BOOLEAN){
+			//Righthand expression is not resolvable to a boolean
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with an equality operator", ctx.boolExpr(1).getText()));
+		}
+		return Type.BOOLEAN;
+	}
+	
+	@Override public Type visitBoolExprBaseExpr(@NotNull YallParser.BoolExprBaseExprContext ctx) { 
+		return visit(ctx.baseExpr()); 
+	}
+	
+	
+	/*
+	 * NUMERICAL EXPRESSIONS - ADDEXPR
+	 */
+	
+	@Override public Type visitAddExprAddOp(@NotNull YallParser.AddExprAddOpContext ctx) { 
+		if (visit(ctx.addExpr(0)) != Type.INTEGER){
+			//Lefthand expression is not resolvable to an integer
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with an equality operator", ctx.addExpr(0).getText()));
+		}
+		if (visit(ctx.addExpr(1)) != Type.INTEGER){
+			//Righthand expression is not resolvable to an integer
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with an equality operator", ctx.addExpr(1).getText()));
 		}
 		return Type.INTEGER;
 	}
-
-	@Override public Type visitExprBoolOp(@NotNull YallParser.ExprBoolOpContext ctx) { 
-		if (visit(ctx.expr(0)) != Type.BOOLEAN){
-			//Lefthand expression is not resolvable to a boolean
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an boolean, therefor cannot be used with a boolean operator", ctx.expr(0).getText()));
-		}
-		if (visit(ctx.expr(1)) != Type.BOOLEAN){
-			//Righthand expression is not resolvable to a boolean
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an boolean, therefor cannot be used with a boolean operator", ctx.expr(1).getText()));
-		}
-		return Type.BOOLEAN;
+	
+	@Override public Type visitAddExprMultExpr(@NotNull YallParser.AddExprMultExprContext ctx) { 
+		return visit(ctx.multExpr()); 
 	}
 	
+	/*
+	 * NUMERICAL EXPRESSIONS - MULTEXPR
+	 */
 	
-	@Override public Type visitExprNot(@NotNull YallParser.ExprNotContext ctx) { 
-		if (visit(ctx.expr()) != Type.BOOLEAN){
-			//Expression is not resolvable to a boolean
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an boolean, cannot be inversed", ctx.expr().getText()));
-		}
-		return Type.BOOLEAN;		
-	}
-
-	
-	@Override public Type visitExprCompOp(@NotNull YallParser.ExprCompOpContext ctx) { 
-		if (visit(ctx.expr(0)) != Type.INTEGER){
+	@Override public Type visitMultExprMultOp(@NotNull YallParser.MultExprMultOpContext ctx) { 
+		if (visit(ctx.multExpr(0)) != Type.INTEGER){
 			//Lefthand expression is not resolvable to an integer
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, sizes cannot be compared" , ctx.expr(0).getText()));
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with an equality operator", ctx.multExpr(0).getText()));
 		}
-		if (visit(ctx.expr(1)) != Type.INTEGER){
+		if (visit(ctx.multExpr(1)) != Type.INTEGER){
 			//Righthand expression is not resolvable to an integer
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, sizes cannot be compared" , ctx.expr(1).getText()));
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to a boolean, therefor cannot be used with an equality operator", ctx.multExpr(1).getText()));
 		}
-		return Type.BOOLEAN;
+		return Type.INTEGER;
 	}
 	
+	@Override public Type visitMultExprParenteses(@NotNull YallParser.MultExprParentesesContext ctx) { 
+		return visit(ctx.addExpr()); 
+	}
+	
+	@Override public Type visitMultExprBaseExpr(@NotNull YallParser.MultExprBaseExprContext ctx) { 
+		return visit(ctx.baseExpr()); 
+	}
 
+	/*
+	 * BASE EXPRESSIONS
+	 */
 	
-	@Override public Type visitExprCompEqOp(@NotNull YallParser.ExprCompEqOpContext ctx) { 
-		Type typeLeft = visit(ctx.expr(0));
-		Type typeRight = visit(ctx.expr(1));
-		if (typeLeft == Type.ERROR){
-			//Lefthand expression is not resolvable to any type
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to any type, equality cannot be checked"  ,ctx.expr(0).getText()));
+	@Override public Type visitBaseExprID(@NotNull YallParser.BaseExprIDContext ctx) { 
+		Variable id = idtable.getID(ctx.getText());
+		Variable globalID = globalScope.getID(ctx.ID().getText());
+		
+		if(id != null){
+			//Variable found in local scope
+			return id.getType();
+		} else if(globalID != null){
+			//Variable found in global scope
+			return globalID.getType();	
+		} else {
+			//Variable not found in global or local scope
+			addError(ctx.start.getLine(), String.format("Variable %s is not declared in this or higher scopes", ctx.getText()));
+			return Type.ERROR;
 		}
-		if (typeRight == Type.ERROR){
-			//Righthand expression is not resolvable to any type
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to any type, equality cannot be checked"  ,ctx.expr(1).getText()));
-		}
-		if(typeLeft != typeRight){
-			//Expressions are not of the same typage
-			addError(ctx.start.getLine(), String.format("%s and %s cannot be resolved to the same type, therefor cannot be compared " ,ctx.expr(0).getText(), ctx.expr(1).getText()));
-		}
-		return Type.BOOLEAN;
 	}
-	
-	@Override public Type visitExprUp(@NotNull YallParser.ExprUpContext ctx) {
+
+	@Override public Type visitBaseExprUp(@NotNull YallParser.BaseExprUpContext ctx) {
 		//Expression to seek a variable upward from any scope above the current
 		IDTable localIDTable = idtable;
 		int upDepth = 0;
@@ -343,9 +428,7 @@ public class YallChecker extends YallBaseVisitor<Type>{
 			//If depth should be 0, target scope is the global scope
 			localIDTable = globalScope;
 		}
-		
-		
-		
+
 		if(localIDTable == null){
 			//No scope exists upDepth levels higher than current scope
 			addError(ctx.start.getLine(), String.format("No scope is found %d levels above %s"  , upDepth, ctx.ID().getText()));
@@ -363,39 +446,48 @@ public class YallChecker extends YallBaseVisitor<Type>{
 					//Variable not found in target local scope, but found in global scope
 					return id.getType();
 				} else {
-				//Variable not found in local or global scope
-				addError(ctx.start.getLine(), String.format("Variable %s is not declared %d or more levels higher", ctx.ID().getText(), upDepth));
-				return Type.ERROR;
+					//Variable not found in local or global scope
+					addError(ctx.start.getLine(), String.format("Variable %s is not declared %d or more levels higher", ctx.ID().getText(), upDepth));
+					return Type.ERROR;
 				}
 			}
 		}
 	}
-		
-	@Override public Type visitExprID(@NotNull YallParser.ExprIDContext ctx) { 
-		Variable id = idtable.getID(ctx.getText());
-		Variable globalID = globalScope.getID(ctx.ID().getText());
-		
-		if(id != null){
-			//Variable found in local scope
-			return id.getType();
-		} else if(globalID != null){
-			//Variable found in global scope
-			return globalID.getType();	
-		} else {
-			//Variable not found in global or local scope
-			addError(ctx.start.getLine(), String.format("Variable %s is not declared in this or higher scopes", ctx.getText()));
-			return Type.ERROR;
-		}
-	}
 	
-	@Override public Type visitExprNum(@NotNull YallParser.ExprNumContext ctx) { 
+	@Override public Type visitBaseExprBlock(@NotNull YallParser.BaseExprBlockContext ctx) { 
+		//TODO no deeper scope level? (up counts blocks as scopes...)
+		return visit(ctx.expr()); 
+	}
+
+	@Override public Type visitBaseExprNum(@NotNull YallParser.BaseExprNumContext ctx) { 
 		return Type.INTEGER;
 		
 	}
 	
-	@Override public Type visitExprBool(@NotNull YallParser.ExprBoolContext ctx) { 
+	@Override public Type visitBaseExprBool(@NotNull YallParser.BaseExprBoolContext ctx) { 
 		return Type.BOOLEAN;
 	}
+	
+	@Override public Type visitBaseExprAdd(@NotNull YallParser.BaseExprAddContext ctx) { 
+		if (visit(ctx.baseExpr()) != Type.INTEGER){
+			//Expression is not resolvable to an integer
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used to add 1", ctx.baseExpr().getText()));
+			return Type.ERROR;
+		}
+		return Type.INTEGER;
+	}
+
+	@Override public Type visitBaseExprSub(@NotNull YallParser.BaseExprSubContext ctx) { 
+		if (visit(ctx.baseExpr()) != Type.INTEGER){
+			//Expression is not resolvable to an integer
+			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer, therefor cannot be used to subtract 1", ctx.baseExpr().getText()));
+			return Type.ERROR;
+		}
+		return Type.INTEGER;
+	}	
+	
+	
+	
 	
 	@Override public Type visitTypeBool(@NotNull YallParser.TypeBoolContext ctx) { 
 		return Type.BOOLEAN;
