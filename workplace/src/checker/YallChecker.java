@@ -100,10 +100,11 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		if(threads.containsKey(ctx.ID().getText())){
 			addError(ctx.start.getLine(), String.format("Thread %s already exists and thus cannot be created", ctx.ID().getText()));
 		} else {
-			visitChildren(ctx);
 			//Register thread in list
 			threads.put(ctx.ID().getText(), nextSPID);
 			nextSPID++;
+			
+			visit(ctx.toplevelblock());
 		}
 		idtable = oldIDTable;
 		return null;
