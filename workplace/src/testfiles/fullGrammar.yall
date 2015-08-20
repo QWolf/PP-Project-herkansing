@@ -18,9 +18,9 @@ if [Y >> Z] then {
 boolean B1;
 boolean B2;
 input B1;
-output B1;
+outputBoolean B1;
 B2 is X and B1;
-output B2;
+outputBoolean B2;
 
 if [X] then {
 	integer Z is Y; 

@@ -22,5 +22,9 @@ public class Load extends Instruction {
 	public String getFullCommand() {
 		return String.format("Load %s %s", addr.getCode(), reg.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

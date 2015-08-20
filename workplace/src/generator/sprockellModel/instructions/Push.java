@@ -20,5 +20,9 @@ public class Push extends Instruction{
 	public String getFullCommand() {
 		return String.format("Push %s", reg.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

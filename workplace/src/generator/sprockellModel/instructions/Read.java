@@ -20,5 +20,9 @@ public class Read extends Instruction{
 	public String getFullCommand() {
 		return String.format("Read %s", addr.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

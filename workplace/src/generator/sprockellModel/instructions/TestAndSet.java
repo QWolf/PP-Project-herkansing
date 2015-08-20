@@ -21,4 +21,8 @@ public class TestAndSet extends Instruction{
 		return String.format("TestAndSet %s", addr.getCode());
 	}
 	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
+	
 }

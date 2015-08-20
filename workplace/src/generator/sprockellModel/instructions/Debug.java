@@ -18,5 +18,9 @@ public class Debug extends Instruction{
 	public String getFullCommand() {
 		return String.format("(%s)", text);
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

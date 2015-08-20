@@ -17,6 +17,10 @@ public class Nop extends Instruction{
 		return "Nop";
 	}
 	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
+	
 	
 
 }

@@ -38,9 +38,6 @@ import checker.YallChecker;
 
 public class Generator extends YallBaseVisitor<Register>{
 	
-	private final boolean speedOptimalization;
-	
-	
 	private final YallChecker checker;
 	private final Program program;
 	private final RegisterManager registers = new RegisterManager();
@@ -110,7 +107,6 @@ public class Generator extends YallBaseVisitor<Register>{
 		globalVarOffset = lockOffset + (checker.getLocks().size() * 2);
 		program = new Program(checker.getName());
 		this.globalScope = checker.getGlobalScope();
-		speedOptimalization = false;
 	}
 	
 	
@@ -149,32 +145,34 @@ public class Generator extends YallBaseVisitor<Register>{
 		
 		Register reg1 = registers.getFreeRegister();
 		
-		//Set initializationDone Flag to 1
-		addInstruction(new Constant(1, reg1));
-		addInstruction(new Write(reg1, new MemAddr(0)));
-		addInstruction(new Jump(new Target(program, new Label("EndOfInit"))));
-			
-		
-		//Wait Loop for SPID != 0
-		Register reg2 = registers.getFreeRegister();	//reg1 is still claimed
-		addInstruction(new Label("InitWaitLoop"), new Constant(1, reg1));
-		addInstruction(new Read(new MemAddr(0)));
-		addInstruction(new Receive(reg2));
-		addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg2));
-		addInstruction(new Branch(reg2, new Target(-3, false)));
-		
-		registers.clearRegister(reg2);
+		if(!checker.getThreads().isEmpty()){
+			//Set initializationDone Flag to 1
+			addInstruction(new Constant(1, reg1));
+			addInstruction(new Write(reg1, new MemAddr(0)));
+			addInstruction(new Jump(new Target(program, new Label("EndOfInit"))));
 		
 		
-		//All threads reach this point simultaneously and therefore start executing the program itself at the same time
-		addInstruction(new Label("EndOfInit"), new Compute(OpCode.NEQUAL, reg_spid, reg_zero, reg1));
+			//Wait Loop for SPID != 0
+			Register reg2 = registers.getFreeRegister();	
+			addInstruction(new Label("InitWaitLoop"), new Constant(1, reg1));
+			addInstruction(new Read(new MemAddr(0)));
+			addInstruction(new Receive(reg2));
+			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg2));
+			addInstruction(new Branch(reg2, new Target(-3, false)));
 		
-		//Fork to next split point, called Fork1. Only SPID0 executes the first toplevelblock
-		addInstruction(new Branch(reg1, new Target(program, new Label("Fork1"))));
-		nextFork = 2;
-
+			registers.clearRegister(reg2);
+		
+		
+			//All threads reach this point simultaneously and therefore start executing the program itself at the same time
+			addInstruction(new Label("EndOfInit"), new Compute(OpCode.NEQUAL, reg_spid, reg_zero, reg1));
+		
+			//Fork to next split point, called Fork1. Only SPID0 executes the first toplevelblock
+			addInstruction(new Branch(reg1, new Target(program, new Label("Fork1"))));
+			nextFork = 2;
+		}
+				
 		registers.clearRegister(reg1);
-
+		
 		visit(ctx.toplevelblock());
 		
 		addInstruction(new EndProg());
@@ -375,6 +373,8 @@ public class Generator extends YallBaseVisitor<Register>{
 	@Override public Register visitStatIf(@NotNull YallParser.StatIfContext ctx) { 
 		Label elsE = new Label("IfElse" + labelCount);
 		Label ifEnd = new Label("IfEnd" + labelCount);
+		labelCount++;
+
 		
 		
 		//--If Condition
@@ -406,7 +406,6 @@ public class Generator extends YallBaseVisitor<Register>{
 			addInstruction(elsE, new Nop());
 		}
 		
-		labelCount++;
 		return null; 
 		
 	}
@@ -630,10 +629,6 @@ public class Generator extends YallBaseVisitor<Register>{
 			addInstruction(new Compute(OpCode.GTE, reg1, reg2, reg2));
 		} else if(ctx.compOp().LE() != null){
 			addInstruction(new Compute(OpCode.LTE, reg1, reg2, reg2));		
-		} else if(ctx.compOp().EQ() != null){
-			addInstruction(new Compute(OpCode.EQUAL, reg1, reg2, reg2));
-		} else if(ctx.compOp().NE() != null){
-			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg2));	
 		} else {
 			System.err.println(String.format("CompOp %s not found!", ctx.compOp().getText()));
 		}
@@ -642,6 +637,23 @@ public class Generator extends YallBaseVisitor<Register>{
 
 		return reg2;
 	}	
+	
+	@Override public Register visitBoolExprCompEqOpAdd(@NotNull YallParser.BoolExprCompEqOpAddContext ctx) { 
+		Register reg1 = visit(ctx.addExpr(0));
+		Register reg2 = visit(ctx.addExpr(1));
+		
+		if(ctx.compEqOp().EQ() != null){
+			addInstruction(new Compute(OpCode.EQUAL, reg1, reg2, reg2));
+		} else if(ctx.compEqOp().NE() != null){
+			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg2));
+		} else {
+			System.err.println(String.format("CompEqOp %s not found!", ctx.compEqOp().getText()));
+		}
+		
+		registers.clearRegister(reg1);
+
+		return reg2;
+	}
 	
 	@Override public Register visitBoolExprCompEqOpBool(@NotNull YallParser.BoolExprCompEqOpBoolContext ctx) { 
 		Register reg1 = visit(ctx.boolExpr(0));
@@ -660,9 +672,14 @@ public class Generator extends YallBaseVisitor<Register>{
 		return reg2;
 	}
 	
-	@Override public Register visitBoolExprBaseExpr(@NotNull YallParser.BoolExprBaseExprContext ctx) { 
-		return visit(ctx.baseExpr()); 
+	@Override public Register visitBoolExprIDExpr(@NotNull YallParser.BoolExprIDExprContext ctx) { 
+		return visit(ctx.idExpr()); 
 	}
+	
+	@Override public Register visitBoolExprBool(@NotNull YallParser.BoolExprBoolContext ctx) { 
+		return visit(ctx.bool()); 
+	}
+	
 	
 	/*
 	 * 	------------EXPRESSION----------------
@@ -718,16 +735,76 @@ public class Generator extends YallBaseVisitor<Register>{
 		return visit(ctx.addExpr()); 
 	}
 
-	@Override public Register visitMultExprBaseExpr(@NotNull YallParser.MultExprBaseExprContext ctx) { 
-		return visit(ctx.baseExpr()); 
+	@Override public Register visitMultExprIntExpr(@NotNull YallParser.MultExprIntExprContext ctx) { 
+		return visit(ctx.intExpr()); 
 	}
 
 	/*
 	 * 	------------EXPRESSION----------------
-	 * 				baseExpr
+	 * 				intExpr
 	 */
 	
-	@Override public Register visitBaseExprID(@NotNull YallParser.BaseExprIDContext ctx) { 
+	@Override public Register visitIntExprNum(@NotNull YallParser.IntExprNumContext ctx) {
+		Register reg1 = registers.getFreeRegister();
+		
+		int value = Integer.parseInt(ctx.NUM().getText());
+		addInstruction(new Constant(value, reg1));
+		
+		return reg1; 
+	}
+
+	
+	
+	@Override public Register visitIntExprAdd(@NotNull YallParser.IntExprAddContext ctx) { 
+		Register reg1 = visit(ctx.intExpr());
+		
+		//Add 1 per plus sign
+		int adds = ctx.ADD().size();
+		
+		if(adds == 1){
+			//Using the INCREMENT operator saves one instruction
+			addInstruction(new Compute(OpCode.INCR, reg1, reg1, reg1));
+			
+		} else {
+		Register reg2 = registers.getFreeRegister();
+
+		addInstruction(new Constant(adds, reg2));
+		addInstruction(new Compute(OpCode.ADD, reg1, reg2, reg1));
+		
+		registers.clearRegister(reg2);
+		}
+		
+		return reg1;
+	}
+
+	@Override public Register visitIntExprSub(@NotNull YallParser.IntExprSubContext ctx) { 
+		Register reg1 = visit(ctx.intExpr());
+		
+		//Add 1 per plus sign
+		int subs = ctx.SUB().size();
+		
+		if(subs == 1){
+			//Using the DECREMENT operator saves one instruction
+			addInstruction(new Compute(OpCode.DECR, reg1, reg1, reg1));
+			
+		} else {
+		Register reg2 = registers.getFreeRegister();
+
+		addInstruction(new Constant(subs, reg2));
+		addInstruction(new Compute(OpCode.SUB, reg1, reg2, reg1));
+		
+		registers.clearRegister(reg2);
+
+		}
+		return reg1;
+	}
+	
+	/*
+	 * 	------------EXPRESSION----------------
+	 * 				idExpr
+	 */
+	
+	@Override public Register visitIdExprID(@NotNull YallParser.IdExprIDContext ctx) { 
 		Register reg1 = registers.getFreeRegister();
 		
 		Variable localID = idtable.getID(ctx.ID().getText());
@@ -748,7 +825,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		return reg1; 
 	}
 
-	@Override public Register visitBaseExprUp(@NotNull YallParser.BaseExprUpContext ctx) {
+	@Override public Register visitIdExprUp(@NotNull YallParser.IdExprUpContext ctx) {
 		Register reg1 = registers.getFreeRegister();
 		
 		
@@ -811,54 +888,11 @@ public class Generator extends YallBaseVisitor<Register>{
 		return reg1; 
 	}
 	
-	@Override public Register visitBaseExprBlock(@NotNull YallParser.BaseExprBlockContext ctx) { 
+	@Override public Register visitIdExprBlock(@NotNull YallParser.IdExprBlockContext ctx) { 
 		return visit(ctx.expr()); 
 	}
 
-	@Override public Register visitBaseExprNum(@NotNull YallParser.BaseExprNumContext ctx) {
-		Register reg1 = registers.getFreeRegister();
-		
-		int value = Integer.parseInt(ctx.NUM().getText());
-		addInstruction(new Constant(value, reg1));
-		
-		return reg1; 
-	}
-
-	@Override public Register visitBaseExprBool(@NotNull YallParser.BaseExprBoolContext ctx) { 
-		return visit(ctx.bool()); 
-	}
 	
-	@Override public Register visitBaseExprAdd(@NotNull YallParser.BaseExprAddContext ctx) { 
-		Register reg1 = visit(ctx.baseExpr());
-		Register reg2 = registers.getFreeRegister();
-		
-		//Add 1 per plus sign
-		int adds = ctx.ADD().size();
-		
-		addInstruction(new Constant(adds, reg2));
-		
-		addInstruction(new Compute(OpCode.ADD, reg1, reg2, reg2));
-		
-		registers.clearRegister(reg1);
-
-		return reg2;
-	}
-
-	@Override public Register visitBaseExprSub(@NotNull YallParser.BaseExprSubContext ctx) { 
-		Register reg1 = visit(ctx.baseExpr());
-		Register reg2 = registers.getFreeRegister();
-		
-		//Add 1 per plus sign
-		int adds = ctx.SUB().size();
-		
-		addInstruction(new Constant(adds, reg2));
-		
-		addInstruction(new Compute(OpCode.SUB, reg1, reg2, reg2));
-		
-		registers.clearRegister(reg1);
-
-		return reg2;
-	}
 	
 	/*
 	 * 	------------OTHER---------------------

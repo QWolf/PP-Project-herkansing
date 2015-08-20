@@ -30,6 +30,7 @@ public class Target extends Operand {
 	 */
 	public Target(int codeAddr, boolean absolute){
 		super(ArgType.TARGET);
+		this.codeAddr = codeAddr;
 		if(absolute){
 			this.targetType = TargetType.ABSOLUTE;
 		} else {
@@ -69,6 +70,7 @@ public class Target extends Operand {
 
 
 		public String getCode() {
+			
 		String ret;
 		switch(targetType){
 		case ABSOLUTE: 
@@ -81,7 +83,8 @@ public class Target extends Operand {
 			ret = "(Ind "+ indRegTarget.getCode() + ")";
 			break;
 		case LABEL:
-			Map<Label, Integer> labelTable = program.getLabelTable();
+			Map<String, Integer> labelTable = program.getLabelTable();
+		
 			ret = "(Abs " + labelTable.get(label.getName()) + ")";			
 			break;
 		default :
@@ -91,5 +94,29 @@ public class Target extends Operand {
 		}
 		return ret;
 	}
+		
+		public String getLabilizedCode() {
+			
+			String ret;
+			switch(targetType){
+			case ABSOLUTE: 
+				ret = "(Abs "+ codeAddr + ")";
+				break;
+			case RELATIVE:
+				ret = "(Rel "+ codeAddr + ")";
+				break;	
+			case INDIRECT:
+				ret = "(Ind "+ indRegTarget.getCode() + ")";
+				break;
+			case LABEL:
+				ret = "(LBL " + label.getName() + ")";			
+				break;
+			default :
+				System.err.println("Unknown Target Type");
+				ret = "(Abs ??)";
+				break;
+			}
+			return ret;
+		}
 	
 }

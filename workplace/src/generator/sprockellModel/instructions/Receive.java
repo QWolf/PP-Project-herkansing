@@ -20,5 +20,9 @@ public class Receive extends Instruction{
 	public String getFullCommand() {
 		return String.format("Receive %s", reg.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

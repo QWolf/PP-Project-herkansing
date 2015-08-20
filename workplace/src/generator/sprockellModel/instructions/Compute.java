@@ -31,5 +31,9 @@ public class Compute extends Instruction{
 	public String getFullCommand() {
 		return String.format("Compute %s %s %s %s", OpCode.getName(opcode), reg1.getCode(), reg2.getCode(), reg3.getCode() );
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

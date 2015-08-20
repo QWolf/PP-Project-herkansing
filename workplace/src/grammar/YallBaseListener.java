@@ -29,30 +29,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBaseExprBlock(@NotNull YallParser.BaseExprBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBaseExprBlock(@NotNull YallParser.BaseExprBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterToplvlFork(@NotNull YallParser.ToplvlForkContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -65,13 +41,13 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatUnlock(@NotNull YallParser.StatUnlockContext ctx) { }
+	@Override public void enterBoolExprBool(@NotNull YallParser.BoolExprBoolContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatUnlock(@NotNull YallParser.StatUnlockContext ctx) { }
+	@Override public void exitBoolExprBool(@NotNull YallParser.BoolExprBoolContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -101,18 +77,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatWhile(@NotNull YallParser.StatWhileContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatWhile(@NotNull YallParser.StatWhileContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterMultOp(@NotNull YallParser.MultOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -137,25 +101,13 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { }
+	@Override public void enterIdExprID(@NotNull YallParser.IdExprIDContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBaseExprID(@NotNull YallParser.BaseExprIDContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBaseExprID(@NotNull YallParser.BaseExprIDContext ctx) { }
+	@Override public void exitIdExprID(@NotNull YallParser.IdExprIDContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -173,18 +125,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatDeclare(@NotNull YallParser.StatDeclareContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatDeclare(@NotNull YallParser.StatDeclareContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBoolExprNot(@NotNull YallParser.BoolExprNotContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -192,30 +132,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolExprNot(@NotNull YallParser.BoolExprNotContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBoolExprBaseExpr(@NotNull YallParser.BoolExprBaseExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoolExprBaseExpr(@NotNull YallParser.BoolExprBaseExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -233,6 +149,234 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStatLock(@NotNull YallParser.StatLockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatLock(@NotNull YallParser.StatLockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntExprNum(@NotNull YallParser.IntExprNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntExprNum(@NotNull YallParser.IntExprNumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInit(@NotNull YallParser.InitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInit(@NotNull YallParser.InitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdExprBlock(@NotNull YallParser.IdExprBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdExprBlock(@NotNull YallParser.IdExprBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdExprUp(@NotNull YallParser.IdExprUpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdExprUp(@NotNull YallParser.IdExprUpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclDecl(@NotNull YallParser.DeclDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclDecl(@NotNull YallParser.DeclDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntExprIDExpr(@NotNull YallParser.IntExprIDExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntExprIDExpr(@NotNull YallParser.IntExprIDExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntExprAdd(@NotNull YallParser.IntExprAddContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntExprAdd(@NotNull YallParser.IntExprAddContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToplvlBlock(@NotNull YallParser.ToplvlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatUnlock(@NotNull YallParser.StatUnlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatUnlock(@NotNull YallParser.StatUnlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultExprIntExpr(@NotNull YallParser.MultExprIntExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultExprIntExpr(@NotNull YallParser.MultExprIntExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatWhile(@NotNull YallParser.StatWhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatWhile(@NotNull YallParser.StatWhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatDeclare(@NotNull YallParser.StatDeclareContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatDeclare(@NotNull YallParser.StatDeclareContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprBoolExpr(@NotNull YallParser.ExprBoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolExprBoolOp(@NotNull YallParser.BoolExprBoolOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -245,13 +389,13 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatLock(@NotNull YallParser.StatLockContext ctx) { }
+	@Override public void enterBoolExprCompEqOpAdd(@NotNull YallParser.BoolExprCompEqOpAddContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatLock(@NotNull YallParser.StatLockContext ctx) { }
+	@Override public void exitBoolExprCompEqOpAdd(@NotNull YallParser.BoolExprCompEqOpAddContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -269,13 +413,13 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBaseExprSub(@NotNull YallParser.BaseExprSubContext ctx) { }
+	@Override public void enterIntExprSub(@NotNull YallParser.IntExprSubContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBaseExprSub(@NotNull YallParser.BaseExprSubContext ctx) { }
+	@Override public void exitIntExprSub(@NotNull YallParser.IntExprSubContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -288,18 +432,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolOp(@NotNull YallParser.BoolOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInit(@NotNull YallParser.InitContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInit(@NotNull YallParser.InitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -324,30 +456,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDeclAssign(@NotNull YallParser.DeclAssignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoolFalse(@NotNull YallParser.BoolFalseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBaseExprNum(@NotNull YallParser.BaseExprNumContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBaseExprNum(@NotNull YallParser.BaseExprNumContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -389,30 +497,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExprNumExpr(@NotNull YallParser.ExprNumExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitToplvlStat(@NotNull YallParser.ToplvlStatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTypeBool(@NotNull YallParser.TypeBoolContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -449,30 +533,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultExprBaseExpr(@NotNull YallParser.MultExprBaseExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMultExprBaseExpr(@NotNull YallParser.MultExprBaseExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTypeInt(@NotNull YallParser.TypeIntContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -480,30 +540,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTypeInt(@NotNull YallParser.TypeIntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBaseExprUp(@NotNull YallParser.BaseExprUpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBaseExprUp(@NotNull YallParser.BaseExprUpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBaseExprBool(@NotNull YallParser.BaseExprBoolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBaseExprBool(@NotNull YallParser.BaseExprBoolContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -521,18 +557,6 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclDecl(@NotNull YallParser.DeclDeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclDecl(@NotNull YallParser.DeclDeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatInput(@NotNull YallParser.StatInputContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -545,6 +569,18 @@ public class YallBaseListener implements YallListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBoolExprIDExpr(@NotNull YallParser.BoolExprIDExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolExprIDExpr(@NotNull YallParser.BoolExprIDExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAddExprMultExpr(@NotNull YallParser.AddExprMultExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -552,18 +588,6 @@ public class YallBaseListener implements YallListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAddExprMultExpr(@NotNull YallParser.AddExprMultExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBaseExprAdd(@NotNull YallParser.BaseExprAddContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBaseExprAdd(@NotNull YallParser.BaseExprAddContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

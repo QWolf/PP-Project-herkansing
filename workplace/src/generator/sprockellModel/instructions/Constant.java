@@ -31,7 +31,10 @@ public class Constant extends Instruction{
 	
 	@Override
 	public String getFullCommand() {
-		return String.format("Const %s %s", value, reg.getCode());
+		return String.format("Const %s %s", value.getCode(), reg.getCode());
 	}
-
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 }

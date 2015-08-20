@@ -22,5 +22,9 @@ public class Store extends Instruction{
 	public String getFullCommand() {
 		return String.format("Store %s %s", reg.getCode(), addr.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

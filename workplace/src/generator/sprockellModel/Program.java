@@ -10,13 +10,13 @@ import java.util.Map;
 
 public class Program {
 	
-	private final Map<Label, Integer> labelTable;
+	private final Map<String, Integer> labelTable;
 	private final List<Instruction> instructions;
 	private final String name;
 	
 	public Program(String name){
 		this.instructions = new ArrayList<Instruction>();
-		this.labelTable = new HashMap<Label, Integer>();
+		this.labelTable = new HashMap<String, Integer>();
 		this.name = name;
 	}
 	
@@ -39,16 +39,26 @@ public class Program {
 			
 			if(instructions.get(i).hasLabel()){
 				Label label = instructions.get(i).getLabel();
-				if(!labelTable.containsKey(label)){
-					labelTable.put(label, i);
+				if(!labelTable.containsKey(label.getName())){
+					labelTable.put(label.getName(), i);
 				} else {
 					System.err.println("Double label : " + label.getName());
 				}
 			}
 		}
+		
+		//Print label Table
+		System.out.println();
+		System.out.println("LabelTable");
+		for(String l : labelTable.keySet()){
+			System.out.println(l + "\t" + labelTable.get(l));
+		}
+		System.out.println();
+
+		
 	}
 	
-	public Map<Label, Integer> getLabelTable(){
+	public Map<String, Integer> getLabelTable(){
 		return labelTable;
 	}
 	
@@ -56,10 +66,28 @@ public class Program {
 		buildLabelTable();
 		String answer = "[";
 		for(Instruction i : instructions){
-			answer = answer + i.getFullCommand() + ", /n ";
+			answer = answer + i.getFullCommand() + ", \n ";
 		}
-		answer = answer + "Endprogram]";
-		System.out.println(answer);
+		answer = answer + "Nop]";
+		//TODO Print to file
+//		System.out.println(answer);
+		return answer;
+	}
+	
+	public String getFullLabilizedProgram(){
+		buildLabelTable();
+		String answer = "[";
+		for(Instruction i : instructions){
+			if(i.hasLabel()){
+				answer = answer + i.getLabel().getName() + "\t";
+			} else {
+				answer = answer + "\t\t";
+			}
+			answer = answer  + i.getFullLabilizedCommand() + ", \n ";
+		}
+		answer = answer + "Nop]";
+		//TODO Print to file
+//		System.out.println(answer);
 		return answer;
 	}
 	

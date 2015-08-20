@@ -11,14 +11,17 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+
 import checker.YallChecker;
+import generator.Generator;
+import generator.sprockellModel.Program;
 import grammar.ErrorListener;
 import grammar.YallParser;
 
 public class YallCompiler {
 	
-	private final static YallChecker checker = new YallChecker();
-	private final static ErrorListener errorListener = new ErrorListener();
+	private final YallChecker checker = new YallChecker();
+	private final ErrorListener errorListener = new ErrorListener();
 	
 	
 	private Lexer lexer;
@@ -75,7 +78,20 @@ public class YallCompiler {
 		} else {
 			System.out.println("Typechecking successful");
 			
+			generate(tree);
 		}
+	}
+	
+	public void generate(ParseTree tree){
+		System.out.println("Starting typechecking");
+		Generator generator = new Generator(checker, tree);
+		generator.visit(tree);
+		Program prog = generator.getProgram();
+		
+		System.out.println(prog.getFullLabilizedProgram());
+
+		System.out.println(prog.getFullProgramCode());
+
 	}
 	
 	//src/testfiles/fullGrammar.yall
@@ -87,6 +103,7 @@ public class YallCompiler {
 		//example: src/files/tests/checker1.txt
 			YallCompiler yc = new YallCompiler();
 			yc.compile(args[0]);
+			
 		}
 	}
 }

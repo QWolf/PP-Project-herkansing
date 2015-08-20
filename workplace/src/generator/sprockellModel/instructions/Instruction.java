@@ -27,6 +27,8 @@ public abstract class Instruction {
 		this.label = label;
 	}
 	
+	public abstract String getFullLabilizedCommand();
+	
 	
 
 }

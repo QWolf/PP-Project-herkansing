@@ -25,4 +25,8 @@ public class Branch extends Instruction{
 	public String getFullCommand() {		
 		return String.format("Branch %s %s", reg.getCode(), target.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return String.format("Branch %s %s", reg.getCode(), target.getLabilizedCode());
+	}
 }

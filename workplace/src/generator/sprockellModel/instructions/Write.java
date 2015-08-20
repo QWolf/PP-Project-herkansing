@@ -23,5 +23,9 @@ public class Write extends Instruction {
 	public String getFullCommand() {
 		return String.format("Write %s %s", reg.getCode(), addr.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

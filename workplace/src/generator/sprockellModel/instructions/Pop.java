@@ -20,5 +20,9 @@ public class Pop extends Instruction{
 	public String getFullCommand() {
 		return String.format("Pop %s", reg.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
 
 }

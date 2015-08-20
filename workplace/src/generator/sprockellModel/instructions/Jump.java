@@ -19,5 +19,9 @@ public class Jump extends Instruction{
 	public String getFullCommand() {
 		return String.format("Jump %s", target.getCode());
 	}
+	
+	public String getFullLabilizedCommand(){
+		return String.format("Jump %s", target.getLabilizedCode());
+	}
 
 }

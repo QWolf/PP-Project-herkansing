@@ -17,6 +17,10 @@ public class EndProg extends Instruction{
 		return "EndProg";
 	}
 	
+	public String getFullLabilizedCommand(){
+		return getFullCommand();
+	}
+	
 	
 
 }

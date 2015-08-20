@@ -59,9 +59,12 @@ expr		:	addExpr				#exprNumExpr
 boolExpr	:	LPAR boolExpr RPAR			#boolParanteses
 			|	boolExpr boolOp boolExpr	#boolExprBoolOp
 			|	NOT boolExpr				#boolExprNot
-			|	addExpr compOp addExpr		#boolExprCompOp
+			|	addExpr compOp addExpr 		#boolExprCompOp
+			//TODO better solution for compEqOp if both expressions are Variables and booleans(now uses number path)
+			|	addExpr compEqOp addExpr	#boolExprCompEqOpAdd
 			|	boolExpr compEqOp boolExpr	#boolExprCompEqOpBool
-			|	baseExpr					#boolExprBaseExpr
+			|	idExpr						#boolExprIDExpr
+			|	bool						#boolExprBool
 			;
 
 //Expressions with an Integer as outcome	
@@ -71,19 +74,21 @@ addExpr		:	addExpr addOp addExpr		#addExprAddOp
 
 multExpr	:	multExpr multOp multExpr	#multExprMultOp
 			|	LPAR addExpr RPAR			#multExprParenteses
-			|	baseExpr					#multExprBaseExpr
+			|	intExpr						#multExprIntExpr
 			;
 	
+intExpr		:	NUM									#intExprNum
+			|	intExpr (ADD)+						#intExprAdd
+			|	intExpr (SUB)+						#intExprSub	
+			|	idExpr								#intExprIDExpr
+			;
+
 			
 //Building bits that actually represent a single (static) value
-baseExpr	:	ID									#baseExprID
-//			|	GLOBAL ID							#baseExprGlobalID
-			|	UP LBLOCK (NUM COMMA)? ID RBLOCK	#baseExprUp
-			|	LBLOCK expr RBLOCK					#baseExprBlock
-			|	NUM									#baseExprNum
-			|	bool								#baseExprBool
-			|	baseExpr (ADD)+						#baseExprAdd
-			|	baseExpr (SUB)+						#baseExprSub
+idExpr		:	ID									#idExprID
+//			|	GLOBAL ID							#idExprGlobalID
+			|	UP LBLOCK (NUM COMMA)? ID RBLOCK	#idExprUp
+			|	LBLOCK expr RBLOCK					#idExprBlock
 			;
 
 
@@ -109,8 +114,6 @@ compOp	:	GT						// Greater Than
 		|	LT						// Less Than
 		|	GE						// GreaterEqual
 		|	LE						// LessEqual
-		|	EQ						// Equal
-		|	NE						// Not Equal
 		;
 		
 // Equality operators (booleans and numbers)		
