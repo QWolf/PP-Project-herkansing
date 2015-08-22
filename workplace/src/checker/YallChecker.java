@@ -195,22 +195,24 @@ public class YallChecker extends YallBaseVisitor<Type>{
 		return null;
 	}
 
-	@Override public Type visitStatInput(@NotNull YallParser.StatInputContext ctx) { 
-		Variable id = idtable.getID(ctx.ID().getText());
-		Variable globalID = globalScope.getID(ctx.ID().getText());
-		if(id == null && globalID == null){
-			addError(ctx.start.getLine(), String.format("Variable %s is not found in scope and thus cannot be used as input", ctx.ID().getText()));
-		}	
-		return null;
-	}
 	
-	@Override public Type visitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { 
-		if(visit(ctx.addExpr()) != Type.INTEGER){
-			//expression is not resolvable to integer
-			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer", ctx.addExpr().getText()));
-		}
-		return null;
-	}
+	//Unfinished
+//	@Override public Type visitStatInput(@NotNull YallParser.StatInputContext ctx) { 
+//		Variable id = idtable.getID(ctx.ID().getText());
+//		Variable globalID = globalScope.getID(ctx.ID().getText());
+//		if(id == null && globalID == null){
+//			addError(ctx.start.getLine(), String.format("Variable %s is not found in scope and thus cannot be used as input", ctx.ID().getText()));
+//		}	
+//		return null;
+//	}
+//	
+//	@Override public Type visitStatOutputInt(@NotNull YallParser.StatOutputIntContext ctx) { 
+//		if(visit(ctx.addExpr()) != Type.INTEGER){
+//			//expression is not resolvable to integer
+//			addError(ctx.start.getLine(), String.format("%s could not be resolved to an integer", ctx.addExpr().getText()));
+//		}
+//		return null;
+//	}
 	
 	@Override public Type visitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { 
 		if(visit(ctx.boolExpr()) != Type.BOOLEAN){

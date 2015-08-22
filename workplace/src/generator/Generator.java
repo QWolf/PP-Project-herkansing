@@ -105,7 +105,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		this.scopes = checker.getScopes();
 		lockOffset = checker.getThreads().size();
 		globalVarOffset = lockOffset + (checker.getLocks().size() * 2);
-		program = new Program(checker.getName());
+		program = new Program(checker.getName(), checker.getThreads().size() + 1);
 		this.globalScope = checker.getGlobalScope();
 	}
 	
@@ -120,6 +120,12 @@ public class Generator extends YallBaseVisitor<Register>{
 
 	
 	@Override public Register visitProgram(@NotNull YallParser.ProgramContext ctx) { 
+		
+		/*
+		 * All SPIDS
+		 */
+		
+		
 		//Only do if SPID 0
 		if(!checker.getThreads().isEmpty()){
 			Register reg1 = registers.getFreeRegister();
@@ -127,6 +133,11 @@ public class Generator extends YallBaseVisitor<Register>{
 			addInstruction(null, new Branch(reg1, new Target(program, new Label("InitWaitLoop"))));
 			registers.clearRegister(reg1);
 		}
+		
+		/*
+		 * All SPIDS to InitWaitLoop
+		 * SPID 0 still here
+		 */
 		
 		//Thread flags
 		for(int i = 0; i < lockOffset; i++){
@@ -152,6 +163,12 @@ public class Generator extends YallBaseVisitor<Register>{
 			addInstruction(new Jump(new Target(program, new Label("EndOfInit"))));
 		
 		
+			/*
+			 * SPID 0 Jumps to label EndOfInit
+			 * All SPIDs except SPID 0 are here
+			 */
+			
+			
 			//Wait Loop for SPID != 0
 			Register reg2 = registers.getFreeRegister();	
 			addInstruction(new Label("InitWaitLoop"), new Constant(1, reg1));
@@ -163,18 +180,30 @@ public class Generator extends YallBaseVisitor<Register>{
 			registers.clearRegister(reg2);
 		
 		
+			/*
+			 * ALL SPIDS are here
+			 */
+			
 			//All threads reach this point simultaneously and therefore start executing the program itself at the same time
 			addInstruction(new Label("EndOfInit"), new Compute(OpCode.NEQUAL, reg_spid, reg_zero, reg1));
 		
 			//Fork to next split point, called Fork1. Only SPID0 executes the first toplevelblock
 			addInstruction(new Branch(reg1, new Target(program, new Label("Fork1"))));
 			nextFork = 2;
+			
+			/*
+			 * Only SPID 0 remains
+			 */
 		}
 				
 		registers.clearRegister(reg1);
 		
 		visit(ctx.toplevelblock());
 		
+		
+		//DummyRead to ensure Writes have been completed
+//		addInstruction(new Read(new MemAddr(0)));
+//		addInstruction(new Receive(reg1));
 		addInstruction(new EndProg());
 		
 		return null; 
@@ -185,13 +214,13 @@ public class Generator extends YallBaseVisitor<Register>{
 	 */
 	
 	@Override public Register visitInit(@NotNull YallParser.InitContext ctx) { 
+		
+		/*
+		 * Only SPID 0 can reach this code
+		 */
+		
 		idtable = checker.getGlobalScope();
-		Register reg1 = registers.getFreeRegister();
-		//Only register 0 does the initialization
-		addInstruction(new Compute(OpCode.NEQUAL, reg_spid, reg_zero, reg1));
-		addInstruction(new Branch(reg1, new Target(program, new Label("InitLoop"))));
 		init = true;
-		registers.clearRegister(reg1);
 		for(DeclContext decl : ctx.decl()){
 			visit(decl);
 		}
@@ -245,21 +274,31 @@ public class Generator extends YallBaseVisitor<Register>{
 		 */
 		
 		
-		//If SPID =/= Thread ID, go to next fork
-		addInstruction(fork, new Constant(threadID, reg1));
-		addInstruction(new Compute(OpCode.NEQUAL, reg1, reg_spid, reg2));
-		addInstruction(new Branch(reg2, new Target(program, nxtFork)));
 		
+		//Only do test if there should pass more SPIDs
 		
-		/*
-		 * Threads jumped
-		 * Fork remains
-		 */
-		
-		
-		//Wait for ThreadMayStart flag to be 1
-		addInstruction(new Constant(1, reg1));
-		
+		if(nextFork < checker.getThreads().size() + 1){
+			//If SPID =/= Thread ID, go to next fork
+			addInstruction(fork, new Constant(threadID, reg1));
+			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg_spid, reg2));
+			addInstruction(new Branch(reg2, new Target(program, nxtFork)));
+			
+			/*
+			 * Threads jumped
+			 * Fork remains
+			 */
+			//Wait for ThreadMayStart flag to be 1
+			addInstruction(new Constant(1, reg1));
+			
+		} else {
+			/*
+			 * Threads jumped
+			 * Fork remains
+			 */
+			//Wait for ThreadMayStart flag to be 1
+			addInstruction(fork, new Constant(1, reg1));
+		}
+	
 		//Read ThreadMayStart flag
 		addInstruction(new Read(new MemAddr(threadID)));
 		addInstruction(new Receive(reg2));
@@ -468,6 +507,10 @@ public class Generator extends YallBaseVisitor<Register>{
 		addInstruction(new Constant(117, reg1));
 		addInstruction(new Write(reg1, stdio));
 		addInstruction(new Constant(101, reg1));
+		addInstruction(new Write(reg1, stdio));
+		
+		//NewLine
+		addInstruction(new Constant(10, reg1));
 		addInstruction(new Write(reg1, stdio));
 			
 		registers.clearRegister(reg1);

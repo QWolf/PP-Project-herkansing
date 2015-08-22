@@ -38,9 +38,9 @@ stat		: 	decl						#statDeclare
  			|	IF LBLOCK boolExpr RBLOCK THEN LBRACE block RBRACE (ELSE LBRACE block RBRACE)? #statIf
  			|	WHILE LBLOCK boolExpr RBLOCK DO LBRACE block RBRACE 					#statWhile
 // 			|	FOR LBLOCK ID SEMI expr SEMI stat RBLOCK LBRACE block* RBRACE		#statFor
-			|	INPUT ID SEMI				#statInput
+//			|	INPUT ID SEMI				#statInput
 			|	OUTPUTBOOL boolExpr SEMI	#statOutputBool
-			|	OUTPUTINT addExpr SEMI		#statOutputInt
+//			|	OUTPUTINT addExpr SEMI		#statOutputInt
 			|	LOCK ID SEMI				#statLock
 			|	UNLOCK ID SEMI				#statUnlock
  			;

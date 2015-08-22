@@ -22,6 +22,8 @@ public class YallCompiler {
 	
 	private final YallChecker checker = new YallChecker();
 	private final ErrorListener errorListener = new ErrorListener();
+	private final boolean printLabilizedCode = true;
+	private final boolean printFullCode = false;
 	
 	
 	private Lexer lexer;
@@ -83,15 +85,20 @@ public class YallCompiler {
 	}
 	
 	public void generate(ParseTree tree){
-		System.out.println("Starting typechecking");
+		System.out.println("Starting generating");
 		Generator generator = new Generator(checker, tree);
 		generator.visit(tree);
 		Program prog = generator.getProgram();
+		if(printLabilizedCode){
+			System.out.println(prog.getFullLabilizedProgram());
+		}
 		
-		System.out.println(prog.getFullLabilizedProgram());
-
-		System.out.println(prog.getFullProgramCode());
-
+		if(printFullCode){
+			System.out.println(prog.getFullProgramCode());
+		}
+		
+		prog.generateHaskellProgram();
+		System.out.println("Generating successful");
 	}
 	
 	//src/testfiles/fullGrammar.yall
@@ -100,7 +107,6 @@ public class YallCompiler {
 			
 			System.out.println("Usage: filename");
 		} else {
-		//example: src/files/tests/checker1.txt
 			YallCompiler yc = new YallCompiler();
 			yc.compile(args[0]);
 			

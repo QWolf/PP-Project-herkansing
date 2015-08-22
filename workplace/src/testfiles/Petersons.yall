@@ -12,6 +12,9 @@ fork P1 (
 	while [ Flag0 and Turn == 0]
 		do {}
 	Flag1 is false;
+	
+	!!Show Thread1 has finished
+	outputBoolean false;
 )
 
 Flag0 is true;
@@ -20,4 +23,10 @@ while [Flag1 and Turn == 1]
 	do {}
 Flag0 is false;
 
+!!Show Thread0 has finished
+outputBoolean true;
+
 join P1;
+
+!!Show Both have finished
+outputBoolean true;

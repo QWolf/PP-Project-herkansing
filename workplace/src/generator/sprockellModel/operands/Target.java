@@ -66,6 +66,13 @@ public class Target extends Operand {
 		LABEL
 	}
 
+	private String getCodeAddrCode(){
+		if(codeAddr < 0){
+			return "(" + codeAddr + ")";
+		} else {
+			return codeAddr + "";
+		}
+	}
 
 
 
@@ -74,17 +81,16 @@ public class Target extends Operand {
 		String ret;
 		switch(targetType){
 		case ABSOLUTE: 
-			ret = "(Abs "+ codeAddr + ")";
+			ret = "(Abs "+ getCodeAddrCode() + ")";
 			break;
 		case RELATIVE:
-			ret = "(Rel "+ codeAddr + ")";
+			ret = "(Rel "+ getCodeAddrCode() + ")";
 			break;	
 		case INDIRECT:
 			ret = "(Ind "+ indRegTarget.getCode() + ")";
 			break;
 		case LABEL:
 			Map<String, Integer> labelTable = program.getLabelTable();
-		
 			ret = "(Abs " + labelTable.get(label.getName()) + ")";			
 			break;
 		default :
@@ -100,10 +106,10 @@ public class Target extends Operand {
 			String ret;
 			switch(targetType){
 			case ABSOLUTE: 
-				ret = "(Abs "+ codeAddr + ")";
+				ret = "(Abs "+ getCodeAddrCode() + ")";
 				break;
 			case RELATIVE:
-				ret = "(Rel "+ codeAddr + ")";
+				ret = "(Rel "+ getCodeAddrCode() + ")";
 				break;	
 			case INDIRECT:
 				ret = "(Ind "+ indRegTarget.getCode() + ")";

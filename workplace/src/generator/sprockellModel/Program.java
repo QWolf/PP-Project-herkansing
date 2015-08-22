@@ -3,6 +3,9 @@ package generator.sprockellModel;
 import generator.sprockellModel.instructions.Instruction;
 import generator.sprockellModel.operands.Label;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +16,14 @@ public class Program {
 	private final Map<String, Integer> labelTable;
 	private final List<Instruction> instructions;
 	private final String name;
+	private static final String filepath = "sprockell/";
+	private final int threads;
 	
-	public Program(String name){
+	public Program(String name, int threads){
 		this.instructions = new ArrayList<Instruction>();
 		this.labelTable = new HashMap<String, Integer>();
 		this.name = name;
+		this.threads = threads;
 	}
 	
 	
@@ -69,11 +75,13 @@ public class Program {
 			answer = answer + i.getFullCommand() + ", \n ";
 		}
 		answer = answer + "Nop]";
-		//TODO Print to file
-//		System.out.println(answer);
+
 		return answer;
 	}
 	
+	/*
+	 * Test Function to show code before labels are transformed into absolute targets
+	 */
 	public String getFullLabilizedProgram(){
 		buildLabelTable();
 		String answer = "[";
@@ -86,10 +94,37 @@ public class Program {
 			answer = answer  + i.getFullLabilizedCommand() + ", \n ";
 		}
 		answer = answer + "Nop]";
-		//TODO Print to file
-//		System.out.println(answer);
 		return answer;
 	}
+	
+	public void generateHaskellProgram(){
+		buildLabelTable();
+		PrintWriter writer;
+
+		try {
+			writer = new PrintWriter(filepath + name +".hs", "UTF-8");
+			
+			writer.println("import Sprockell.System");
+			writer.println();
+			writer.println("prog :: [Instruction]");
+			
+			writer.print( "prog = [");
+			for(Instruction i : instructions){
+				writer.println( "\t" + i.getFullCommand() + ",");
+			}
+			writer.println("\t Nop]");
+			writer.println();
+			writer.print("main = run ");
+			writer.print(threads);
+			writer.println(" prog >> putChar '\\n'");
+			
+			writer.flush();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	public String getProgramName(){
 		return name;

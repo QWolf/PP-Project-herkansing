@@ -3,11 +3,10 @@
 !	Tests Input, output
 @!
 
-YALL Test2
+YALL Correct2
 
 !!Testing variablenames
 boolean Glow245425lkjgalhajkslhdsjkfhsdjkghkalskjvbksHKJHEbfksjhalskfj;
 
 !!Testing Input & Output
-input Glow245425lkjgalhajkslhdsjkfhsdjkghkalskjvbksHKJHEbfksjhalskfj;
-output Glow245425lkjgalhajkslhdsjkfhsdjkghkalskjvbksHKJHEbfksjhalskfj /= true;
+outputBoolean Glow245425lkjgalhajkslhdsjkfhsdjkghkalskjvbksHKJHEbfksjhalskfj /= true;
