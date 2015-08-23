@@ -1,0 +1,13 @@
+!@
+!	Correct Code
+!	Decl
+!	DeclAssign
+@!
+
+YALL CorrectStatDecl
+
+boolean Var;
+boolean Var2 is true;
+
+integer Var3;
+integer Var4 is 8;

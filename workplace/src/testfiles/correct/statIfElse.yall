@@ -1,0 +1,28 @@
+!@
+!	Correct Code
+!	statIf(+Else clause)
+@!
+
+YALL CorrectStatIfElse
+
+boolean Var;
+boolean Var2 is true;
+
+integer Var3;
+integer Var4 is 8;
+
+
+!!If True
+if [Var2] then {
+	Var2 is false;
+	} else {
+	Var2 is true;
+	}
+	
+!!If False
+if[false] then{
+	Var is Var2;
+	}else {
+	Var2 is true;
+	}
+	

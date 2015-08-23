@@ -20,7 +20,7 @@ DO:		'do';
 NONE: 	'none';
 UP: 	'up';
 INPUT: 	'input';
-OUTPUTBOOL:	'outputBoolean';
+OUTPUTBOOL:	'outputBoolean' | 'outputBool';
 OUTPUTINT:	'outputInt';
 
 //Types

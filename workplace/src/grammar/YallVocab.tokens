@@ -55,7 +55,6 @@ WHILE=8
 FALSE=22
 EXCL=33
 'fork'=11
-'outputBoolean'=17
 '-'=36
 'not'=45
 'and'=42

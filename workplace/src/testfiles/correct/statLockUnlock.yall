@@ -1,0 +1,38 @@
+!@
+!	Correct Code
+!	Fork
+!	Lock
+!	Unlock
+@!
+
+YALL CorrectLockUnlock
+
+global
+	boolean Test is true;
+local
+
+boolean Var;
+integer Var4 is 10;
+
+
+fork OtherThread (
+	integer Var4 is 10;
+	lock Lock;
+	while [Var4 >> 0] do {
+		outputBoolean true;
+		Var4 is Var4-;
+		}
+		
+	boolean Var is Test;
+	unlock Lock;
+	)
+
+
+lock Lock;
+while [Var4 >> 0] do {
+	outputBoolean false;
+	Var4 is Var4-;
+	}
+	
+Var is Test;
+unlock Lock;

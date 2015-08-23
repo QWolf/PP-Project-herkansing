@@ -1,0 +1,46 @@
+!@
+!	Correct Code
+!	booPar
+!	boolOp
+!	boolNot
+!	compOp
+!	compEqOp(int)
+!	compEqOp(bool)
+!	bool
+@!
+
+YALL CorrectBoolExpr
+
+integer A is 2;
+integer B is 4;
+
+!!boolPar
+boolean Var1 is (true);
+
+!!boolOp
+boolean Var2 is true or false;
+boolean Var3 is true and false;
+boolean Var4 is true xor false;
+
+!!boolNot
+boolean Var5 is not true;
+
+!!compExpr 
+Var1 is 2 << 4;
+Var1 is 2 >> B;
+Var1 is A =< B;
+Var1 is A >= 3;
+
+!!compEqOp(integer)
+Var2 is 2 == 4;
+Var2 is 2 == A;
+Var2 is A /= B;
+
+!! compEqOp(Boolean)
+Var3 is true == false;
+Var4 is Var1 == true;
+Var4 is Var3 /= Var4;
+
+!! bool
+Var5 is true;
+Var1 is false;

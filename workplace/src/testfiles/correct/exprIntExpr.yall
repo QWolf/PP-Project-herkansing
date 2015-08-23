@@ -1,0 +1,39 @@
+!@
+!	Correct Code
+!	addExpr addOp addExpr
+!	multExpr multOp multExpr
+!	LPAR addExpr RPAR
+!	intExprNum
+!	intExprAdd
+!	intExprSub
+!	idExpr
+@!
+
+YALL CorrectIntExpr
+
+!! addOp
+integer Var1 is 2 plus 3;
+integer Var2 is Var1 minus 4;
+integer Var3 is Var1 plus Var2;
+
+!! multOp
+Var1 is 2 times 3;
+Var2 is Var3 div 5;
+Var3 is Var1 mod Var2;
+
+!! pars
+Var1 is (4);
+
+!! intExprNum
+Var1 is 3;
+
+!! intExprAdd
+Var1 is 4+;
+Var2 is 4++++++++;
+
+!! intExprSub;
+Var1 is 3-;
+Var2 is 3------;
+
+!! idExpr
+Var3 is Var2;

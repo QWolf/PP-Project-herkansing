@@ -22,7 +22,7 @@ public class YallCompiler {
 	
 	private final YallChecker checker = new YallChecker();
 	private final ErrorListener errorListener = new ErrorListener();
-	private final boolean printLabilizedCode = true;
+	private final boolean printLabilizedCode = false;
 	private final boolean printFullCode = false;
 	
 	
@@ -98,7 +98,14 @@ public class YallCompiler {
 		}
 		
 		prog.generateHaskellProgram();
-		System.out.println("Generating successful");
+		
+		if(!generator.getErrors().isEmpty()){
+			for(String s : generator.getErrors()){
+				System.err.println(s);
+				} 
+			} else {
+				System.out.println("Generating successful");
+			}
 	}
 	
 	//src/testfiles/fullGrammar.yall

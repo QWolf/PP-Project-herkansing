@@ -1,0 +1,17 @@
+!@
+!	Correct Code
+!	statAssign
+@!
+
+YALL CorrectStatAssign
+
+boolean Var;
+boolean Var2 is true;
+
+integer Var3;
+integer Var4 is 8;
+
+Var is false;
+Var2 is false;
+Var3 is 7;
+Var4 is 0;

@@ -1,0 +1,17 @@
+!@
+!	Correct Code
+!	Output Boolean
+@!
+
+YALL CorrectOutputBool
+
+boolean Var;
+boolean Var2 is true;
+
+integer Var3;
+integer Var4 is 8;
+
+outputBoolean Var;
+outputBoolean Var2;
+outputBoolean true;
+outputBoolean false;

@@ -1,0 +1,24 @@
+!@
+!	Correct Code
+!	While
+@!
+
+YALL CorrectWhile
+
+boolean Var;
+boolean Var2 is true;
+
+integer Var3;
+integer Var4 is 8;
+
+!! enter
+while [Var2] do {
+	Var2 is false;
+	Var3 is Var3+;
+	}
+	
+	
+!! never enter	
+while [false] do {
+	outputBoolean false;
+	}

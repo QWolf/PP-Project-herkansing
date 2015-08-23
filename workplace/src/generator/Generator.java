@@ -1,5 +1,7 @@
 package generator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import generator.sprockellModel.Program;
@@ -43,6 +45,8 @@ public class Generator extends YallBaseVisitor<Register>{
 	private final RegisterManager registers = new RegisterManager();
 	
 	private final MemAddr stdio = new MemAddr(0x1000000);
+	private final List<String> errors;
+
 
 	//Indicates which label should be used for the next fork
 	private int nextFork = 1;
@@ -107,6 +111,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		globalVarOffset = lockOffset + (checker.getLocks().size() * 2);
 		program = new Program(checker.getName(), checker.getThreads().size() + 1);
 		this.globalScope = checker.getGlobalScope();
+		this.errors = new ArrayList<String>();
 	}
 	
 	
@@ -399,7 +404,7 @@ public class Generator extends YallBaseVisitor<Register>{
 				addInstruction(new Write(reg1, new MemAddr(globalVarOffset + globalID.getOffset())));
 			} else {
 				//ID is found neither locally, nor globally
-				System.err.println(String.format("Variable %s is not found in IDTable, should have been caught by the checker", ctx.ID().getText()));
+				addError(ctx.start.getLine(), String.format("Variable %s is not found in IDTable, should have been caught by the checker", ctx.ID().getText()));
 			}
 		}
 	
@@ -482,6 +487,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		return null; 
 	}
 
+	//TODO Lock output so only one thread can print at any time
 	@Override public Register visitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { 
 		Register reg1 = visit(ctx.boolExpr());
 		addInstruction(new Branch(reg1, new Target(12, false)));
@@ -638,10 +644,10 @@ public class Generator extends YallBaseVisitor<Register>{
 			addInstruction(new Compute(OpCode.AND, reg1, reg2, reg2));
 		} else if(ctx.boolOp().OR() != null){
 			addInstruction(new Compute(OpCode.OR, reg1, reg2, reg2));
-		} else if(ctx.boolOp().AND() != null){
+		} else if(ctx.boolOp().XOR() != null){
 			addInstruction(new Compute(OpCode.XOR, reg1, reg2, reg2));
 		} else {
-			System.err.println(String.format("Boolop %s not found!", ctx.boolOp().getText()));
+			addError(ctx.start.getLine(),String.format("Boolop %s not found!", ctx.boolOp().getText()));
 		}
 		
 		registers.clearRegister(reg1);
@@ -673,7 +679,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		} else if(ctx.compOp().LE() != null){
 			addInstruction(new Compute(OpCode.LTE, reg1, reg2, reg2));		
 		} else {
-			System.err.println(String.format("CompOp %s not found!", ctx.compOp().getText()));
+			addError(ctx.start.getLine(),String.format("CompOp %s not found!", ctx.compOp().getText()));
 		}
 		
 			registers.clearRegister(reg1);
@@ -690,7 +696,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		} else if(ctx.compEqOp().NE() != null){
 			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg2));
 		} else {
-			System.err.println(String.format("CompEqOp %s not found!", ctx.compEqOp().getText()));
+			addError(ctx.start.getLine(),String.format("CompEqOp %s not found!", ctx.compEqOp().getText()));
 		}
 		
 		registers.clearRegister(reg1);
@@ -707,7 +713,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		} else if(ctx.compEqOp().NE() != null){
 			addInstruction(new Compute(OpCode.NEQUAL, reg1, reg2, reg2));
 		} else {
-			System.err.println(String.format("CompEqOp %s not found!", ctx.compEqOp().getText()));
+			addError(ctx.start.getLine(),String.format("CompEqOp %s not found!", ctx.compEqOp().getText()));
 		}
 		
 		registers.clearRegister(reg1);
@@ -738,7 +744,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		} else if(ctx.addOp().MINUS() != null){
 			addInstruction(new Compute(OpCode.SUB, reg1, reg2, reg2));	
 		} else {
-			System.err.println(String.format("AddOp %s not found!", ctx.addOp().getText()));
+			addError(ctx.start.getLine(),String.format("AddOp %s not found!", ctx.addOp().getText()));
 		}
 		
 		registers.clearRegister(reg1);
@@ -766,7 +772,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		} else if(ctx.multOp().MODULO() != null){
 			addInstruction(new Compute(OpCode.MOD, reg1, reg2, reg2));	
 		} else {
-			System.err.println(String.format("MultOp %s not found!", ctx.multOp().getText()));
+			addError(ctx.start.getLine(),String.format("MultOp %s not found!", ctx.multOp().getText()));
 		}
 		
 		registers.clearRegister(reg1);
@@ -862,7 +868,7 @@ public class Generator extends YallBaseVisitor<Register>{
 				addInstruction(new Receive(reg1));
 			} else {
 				//Variable not found in Global nor local scope, should be caught by the checker!
-				System.err.println(String.format("Variable %s is not found in global or local, should have been caught by the checker", ctx.ID().getText()));
+				addError(ctx.start.getLine(),String.format("Variable %s is not found in global or local, should have been caught by the checker", ctx.ID().getText()));
 			}
 		}		
 		return reg1; 
@@ -894,7 +900,7 @@ public class Generator extends YallBaseVisitor<Register>{
 			localIDTable = idtable.getParentScope();
 		}
 		
-		
+
 		//Set globalScope if necessary
 		if(idtable.getDepth() == upDepth){
 			//If depth should be 0, target scope is the global scope
@@ -905,7 +911,7 @@ public class Generator extends YallBaseVisitor<Register>{
 		//Get Variable
 		if(localIDTable == null){
 			//No scope exists upDepth levels higher than current scope
-			System.out.println(String.format("No scope is found %d levels above %s. Checker should have caught this"  , upDepth, ctx.ID().getText()));
+			addError(ctx.start.getLine(),String.format("No scope is found %d levels above %s. Checker should have caught this"  , upDepth, ctx.ID().getText()));
 			return reg_zero;
 		} else {
 			//Scope found
@@ -923,7 +929,7 @@ public class Generator extends YallBaseVisitor<Register>{
 					
 				} else {
 				//Variable not found in local or global scope
-				System.out.println(String.format("Variable %s is not declared %d or more levels higher, should have been caught by the checker", ctx.ID().getText(), upDepth));
+					addError(ctx.start.getLine(),String.format("Variable %s is not declared %d or more levels higher, should have been caught by the checker", ctx.ID().getText(), upDepth));
 				return reg_zero;
 				}
 			}
@@ -971,6 +977,19 @@ public class Generator extends YallBaseVisitor<Register>{
 	
 	public Program getProgram(){
 		return program;
+	}
+	
+	//Add error to the error list
+	private void addError(int line, String text){
+		if(line != 0){
+			errors.add(String.format("Line %d : %s", line, text ));
+		} else {
+			errors.add(text);
+		}
+		
+	}
+	public List<String> getErrors(){
+		return errors;
 	}
 
 
