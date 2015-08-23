@@ -901,37 +901,43 @@ public class Generator extends YallBaseVisitor<Register>{
 		}
 		
 
-		//Set globalScope if necessary
 		if(idtable.getDepth() == upDepth){
+			//GLOBAL SCOPE
 			//If depth should be 0, target scope is the global scope
 			localIDTable = globalScope;
-		}
-		
-		
-		//Get Variable
-		if(localIDTable == null){
-			//No scope exists upDepth levels higher than current scope
+			
+			Variable id = globalScope.getID(ctx.ID().getText());
+			if(id != null){
+				//Variable found in Global Scope
+				addInstruction(new Read(new MemAddr(globalVarOffset + id.getOffset())));
+				addInstruction(new Receive(reg1));
+			} else {
+				addError(ctx.start.getLine(), String.format("Variable %s was not found in the global scope, should have been caught by the checker!", ctx.ID()));
+				return reg_zero;
+			}				
+			
+		} else if(localIDTable == null){
+			//NO SCOPE
+			//Target Depth is deeper than scopeDepth
 			addError(ctx.start.getLine(),String.format("No scope is found %d levels above %s. Checker should have caught this"  , upDepth, ctx.ID().getText()));
 			return reg_zero;
 		} else {
-			//Scope found
+			//LOCAL SCOPE
 			Variable id = localIDTable.getID(ctx.ID().getText());
 			if(id != null){
-				//Variable found in scope
+				//Variable found in local scope
 				addInstruction(new Load(new MemAddr(id.getOffset()), reg1));
 			} else {
-				//Variable not found in target scope or up
+				//Variable not found in local Scope				
 				id = globalScope.getID(ctx.ID().getText());
 				if(id != null){
-					//Variable not found in target local scope, but found in global scope
+					//Search started in local scope, variable found in global scope
 					addInstruction(new Read(new MemAddr(globalVarOffset + id.getOffset())));
 					addInstruction(new Receive(reg1));
-					
 				} else {
-				//Variable not found in local or global scope
-					addError(ctx.start.getLine(),String.format("Variable %s is not declared %d or more levels higher, should have been caught by the checker", ctx.ID().getText(), upDepth));
-				return reg_zero;
-				}
+					addError(ctx.start.getLine(), String.format("Variable %s was not found  %d levels above %s , should have been caught by the checker!", ctx.ID().getText(), upDepth, ctx.ID().getText()));
+					return reg_zero;
+				}			
 			}
 		}
 		return reg1; 
