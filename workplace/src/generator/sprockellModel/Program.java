@@ -52,16 +52,6 @@ public class Program {
 				}
 			}
 		}
-		
-		//Print label Table
-		System.out.println();
-		System.out.println("LabelTable");
-		for(String l : labelTable.keySet()){
-			System.out.println(l + "\t" + labelTable.get(l));
-		}
-		System.out.println();
-
-		
 	}
 	
 	public Map<String, Integer> getLabelTable(){

@@ -14,7 +14,7 @@ prog = [
          -- If we add some Nop's to delay the EndProg
          --  then the shared memory has time to handle all the writes.
          -- And the debug message will be printed.
-         --, Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop
+         , Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop
          , EndProg
        ]
 

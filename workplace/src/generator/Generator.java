@@ -72,7 +72,7 @@ public class Generator extends YallBaseVisitor<Register>{
 	 * 
 	 * lockOffset till (lockOffset + (#Locks * 2)) - 1
 	 * 					->	Two flags per lock
-	 * 						(lockOffset + (#Locks * 2)) = globalVarOffset
+	 * 						(lockOffset + (#Locks * 2)) = writeOffset
 	 * 
 	 * 		Address lockOffset + (2 * lockInt) = Locked flag
 	 * 											0 if lock is free
@@ -82,6 +82,18 @@ public class Generator extends YallBaseVisitor<Register>{
 	 * 											0 if lock is free
 	 * 											SPID of locker if locked
 	 * 
+	 * ----WRITE FLAGS-----------
+	 * writeFlagsOffset till (writeFlagsOffset + 2)
+	 * 						->	Two flags
+	 * 							(writeFlagsOffset + 2) = globalVarOffset)
+	 * 
+	 * 		Address writeFlagOffset = Locked flag
+	 * 									0 if no thread is writing
+	 * 									1 if some thread is writing
+	 * 
+	 * 		Address writeFlagOffset + 1 = Locked-By flag
+	 * 									SPID of locker if locked
+	 * 
 	 * -----GLOBAL MEMORY--------
 	 * 
 	 * globalVarOffset till ??
@@ -90,6 +102,7 @@ public class Generator extends YallBaseVisitor<Register>{
 	 * 		
 	 */
 	private final int lockOffset;
+	private final int outputFlagsOffset;
 	private final int globalVarOffset;
 	
 	//Indicates whether the init phase is still generating (and therefor declarations are global)
@@ -107,8 +120,9 @@ public class Generator extends YallBaseVisitor<Register>{
 	public Generator(YallChecker checker, ParseTree tree){
 		this.checker = checker;
 		this.scopes = checker.getScopes();
-		lockOffset = checker.getThreads().size();
-		globalVarOffset = lockOffset + (checker.getLocks().size() * 2);
+		lockOffset = checker.getThreads().size() + 1;
+		outputFlagsOffset = lockOffset + (checker.getLocks().size() * 2);
+		globalVarOffset = outputFlagsOffset + 2;
 		program = new Program(checker.getName(), checker.getThreads().size() + 1);
 		this.globalScope = checker.getGlobalScope();
 		this.errors = new ArrayList<String>();
@@ -207,8 +221,8 @@ public class Generator extends YallBaseVisitor<Register>{
 		
 		
 		//DummyRead to ensure Writes have been completed
-//		addInstruction(new Read(new MemAddr(0)));
-//		addInstruction(new Receive(reg1));
+		addInstruction(new Read(new MemAddr(0)));
+		addInstruction(new Receive(reg1));
 		addInstruction(new EndProg());
 		
 		return null; 
@@ -487,9 +501,30 @@ public class Generator extends YallBaseVisitor<Register>{
 		return null; 
 	}
 
-	//TODO Lock output so only one thread can print at any time
 	@Override public Register visitStatOutputBool(@NotNull YallParser.StatOutputBoolContext ctx) { 
-		Register reg1 = visit(ctx.boolExpr());
+		
+		//Set output flag to true, so only one thread prints at any given time
+		Register reg1 = registers.getFreeRegister();
+
+		
+		//Try if Lock is free
+		addInstruction(new TestAndSet(new MemAddr(outputFlagsOffset)));
+		addInstruction(new Receive(reg1));
+		
+		
+		//If lock is in use, try again
+		addInstruction(new Branch(reg1, new Target(2, false)));
+		addInstruction(new Jump(new Target(-3, false)));
+
+		
+		//If lock is free, set SPID
+		addInstruction(new Write(reg_spid, new MemAddr(outputFlagsOffset + 1)));
+		
+		registers.clearRegister(reg1);
+		
+		
+		
+		reg1 = visit(ctx.boolExpr());
 		addInstruction(new Branch(reg1, new Target(12, false)));
 		
 		//False
@@ -519,7 +554,13 @@ public class Generator extends YallBaseVisitor<Register>{
 		addInstruction(new Constant(10, reg1));
 		addInstruction(new Write(reg1, stdio));
 			
+		//Ensure writing is finished before giving up the lock
+		addInstruction(new Read(new MemAddr(0)));
+		addInstruction(new Receive(reg1));
+		
 		registers.clearRegister(reg1);
+		
+		addInstruction(new Write(reg_zero, new MemAddr(outputFlagsOffset)));
 			
 		return null; 
 	}
@@ -540,7 +581,8 @@ public class Generator extends YallBaseVisitor<Register>{
 		addInstruction(new Receive(reg1));
 		
 		//If lock is in use, try again
-		addInstruction(new Branch(reg1, new Target(-2, false)));
+		addInstruction(new Branch(reg1, new Target(2, false)));
+		addInstruction(new Jump(new Target(-3, false)));
 		
 		//If lock is free, set SPID
 		addInstruction(new Write(reg_spid, new MemAddr(lockAddress + 1)));

@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 import Sprockell.System
 
 {-
@@ -10,82 +12,23 @@ import Sprockell.System
 loopCount = 10
 
 prog :: [Instruction]
-prog = [	Const 0 RegE, 
-	Store RegE (Addr 0), 
-	Const 0 RegE, 
-	Store RegE (Addr 4), 
- Const 1 RegE, 
- Store RegE (Addr 8), 
- Load (Addr 4) RegE, 
- Load (Addr 8) RegD, 
- Compute Equal RegE RegD RegD, 
- Branch RegD (Rel 2), 
- Jump (Abs 32), 
- Const 0 RegD, 
- Branch RegD (Rel 12), 
- Const (ord 'A') RegD, 
- Write RegD (Addr 0x1000000), 
- Const 97 RegD, 
- Write RegD (Addr 16777216), 
- Const 108 RegD, 
- Write RegD (Addr 16777216), 
- Const 115 RegD, 
- Write RegD (Addr 16777216), 
- Const 101 RegD, 
- Write RegD (Addr 16777216), 
- Jump (Rel 9), 
- Const (ord 'A') RegD, 
- Write RegD (Addr 0x1000000), 
- Const 114 RegD, 
- Write RegD (Addr 16777216), 
- Const 117 RegD, 
- Write RegD (Addr 16777216), 
- Const 101 RegD, 
- Write RegD (Addr 16777216), 
- Nop, 
- Nop, 
- Load (Addr 0) RegD, 
- Branch RegD (Abs 37), 
- Jump (Abs 72), 
- Nop, 
- Const 0 RegD, 
- Store RegD (Addr 12), 
- Load (Addr 12) RegD, 
- Const 10 RegE, 
- Compute Lt RegD RegE RegE, 
- Branch RegE (Rel 2), 
- Jump (Abs 50), 
- Load (Addr 12) RegE, 
- Const 1 RegD, 
- Compute Add RegE RegD RegD, 
- Store RegD (Addr 12), 
- Jump (Abs 70), 
- Nop, 
- Load (Addr 12) RegD, 
- Const 0 RegE, 
- Store RegE (Addr 12), 
- Load (Addr 8) RegE, 
- Const 1 RegC, 
- Compute Xor RegE RegC RegC, 
- Branch RegC (Rel 2), 
- Jump (Abs 62), 
- Const 1 RegC, 
- Store RegC (Addr 8), 
- Jump (Abs 65), 
- Nop, 
- Const 1 RegC, 
- Store RegC (Addr 4), 
- Nop, 
- Load (Addr 4) RegC, 
- Load (Addr 8) RegE, 
- Compute And RegC RegE RegE, 
- Store RegE (Addr 0), 
- Nop, 
- Jump (Abs 33), 
- Nop, 
- EndProg, 
- Nop]
+prog = [	Const 2147483647 RegE
+		, Write RegE (Addr 0)
+		, Read (Addr 0)
+
+		, Receive RegA
+		, Write RegA stdio
+			
+			
+			         , Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop,Nop
+
+		, EndProg
+	]
 
 
-main = run 1 prog >> putChar '\n'
+debug :: SystemState -> String
+debug SysState{..} | (sharedMem !!! 1) /= 0 = "First shared memaddr equals 0.\n"
+debug _ = "-"
+
+main = runDebug debug 3 prog
 

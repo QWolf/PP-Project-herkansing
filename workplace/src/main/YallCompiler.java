@@ -1,8 +1,10 @@
 package main;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -108,12 +110,44 @@ public class YallCompiler {
 			}
 	}
 	
+	public static List<String> getFiles(String dir){
+		File folder = new File(dir);
+		File[] thisFolder = folder.listFiles();
+		List <String> allFiles = new ArrayList<String>();
+		
+		for(File f : thisFolder){
+			if(f.isFile()){
+				allFiles.add(dir + "/" + f.getName());
+			} else if(f.isDirectory()){
+				List<String> dirFiles = getFiles(dir + "/" + f.getName());
+				allFiles.addAll(dirFiles);
+				
+			}
+		}
+		return allFiles;
+	}
+	
 	//src/testfiles/fullGrammar.yall
 	public static void main(String[] args){
-		if (args.length != 1){
-			
+		if (args.length != 1){			
 			System.out.println("Usage: filename");
+			
+		} else if(args[0].equals("CompileAll")){
+			
+			//TODO Java output acts weirdly, but does work
+			
+			List<String> paths = getFiles("src/testfiles");
+
+			for(String path : paths){
+				System.out.println("Compiling "+ path);
+				YallCompiler yc = new YallCompiler();
+				yc.compile(path);
+				System.out.println();
+			}
+			
+			
 		} else {
+			System.out.println("Compiling "+ args[0]);
 			YallCompiler yc = new YallCompiler();
 			yc.compile(args[0]);
 			

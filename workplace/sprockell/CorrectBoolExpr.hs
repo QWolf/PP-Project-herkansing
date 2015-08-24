@@ -1,7 +1,10 @@
 import Sprockell.System
 
 prog :: [Instruction]
-prog = [	Const 2 RegE,
+prog = [	Write Zero (Addr 0),
+	Write Zero (Addr 1),
+	Write Zero (Addr 2),
+	Const 2 RegE,
 	Store RegE (Addr 0),
 	Const 4 RegE,
 	Store RegE (Addr 4),
@@ -67,6 +70,8 @@ prog = [	Const 2 RegE,
 	Store RegE (Addr 24),
 	Const 0 RegE,
 	Store RegE (Addr 8),
+	Read (Addr 0),
+	Receive RegE,
 	EndProg,
 	 Nop]
 

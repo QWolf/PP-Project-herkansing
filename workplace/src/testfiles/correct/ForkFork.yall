@@ -1,0 +1,29 @@
+!@
+!	Correct
+!	Fork inside a forked thread
+@!
+
+YALL CorrectForkFork
+
+fork Test (
+
+	fork ForkedFork (
+		integer C is 0;
+		while [C << 20] do {
+			C is C+;
+		}
+	)
+
+
+
+	integer A is 0;
+	while [A << 20] do {
+		A is A+;
+	}
+)
+
+integer B is 0;
+while [B << 0] do {
+	B is B+;
+	}
+	

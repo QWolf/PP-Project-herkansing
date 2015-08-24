@@ -1,7 +1,15 @@
 import Sprockell.System
 
 prog :: [Instruction]
-prog = [	Store Zero (Addr 0),
+prog = [	Write Zero (Addr 0),
+	Write Zero (Addr 1),
+	Write Zero (Addr 2),
+	Store Zero (Addr 0),
+	TestAndSet (Addr 1),
+	Receive RegE,
+	Branch RegE (Rel 2),
+	Jump (Rel (-3)),
+	Write SPID (Addr 2),
 	Load (Addr 0) RegE,
 	Const 1 RegD,
 	Compute NEq RegE RegD RegD,
@@ -27,6 +35,11 @@ prog = [	Store Zero (Addr 0),
 	Write RegD (Addr 16777216),
 	Const 10 RegD,
 	Write RegD (Addr 16777216),
+	Read (Addr 0),
+	Receive RegD,
+	Write Zero (Addr 1),
+	Read (Addr 0),
+	Receive RegE,
 	EndProg,
 	 Nop]
 

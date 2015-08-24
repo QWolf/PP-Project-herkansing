@@ -1,0 +1,19 @@
+!@
+!	Correct
+!	Fork
+@!
+
+YALL CorrectFork
+
+fork Test (
+	integer A is 0;
+	while [A << 20] do {
+		A is A+;
+	}
+)
+
+integer B is 0;
+while [B << 0] do {
+	B is B+;
+	}
+	
