@@ -14,6 +14,8 @@ import generator.sprockellModel.instructions.Instruction;
 import generator.sprockellModel.instructions.Jump;
 import generator.sprockellModel.instructions.Load;
 import generator.sprockellModel.instructions.Nop;
+import generator.sprockellModel.instructions.Pop;
+import generator.sprockellModel.instructions.Push;
 import generator.sprockellModel.instructions.Read;
 import generator.sprockellModel.instructions.Receive;
 import generator.sprockellModel.instructions.Store;
@@ -524,41 +526,41 @@ public class Generator extends YallBaseVisitor<Register>{
 		
 		
 		
-		reg1 = visit(ctx.boolExpr());
-		addInstruction(new Branch(reg1, new Target(12, false)));
+		Register reg2 = visit(ctx.boolExpr());
+		addInstruction(new Branch(reg2, new Target(12, false)));
 		
 		//False
-		addInstruction(new Constant(102, reg1));
-		addInstruction(new Write(reg1, stdio));
-		addInstruction(new Constant(97, reg1));
-		addInstruction(new Write(reg1, stdio));
-		addInstruction(new Constant(108, reg1));
-		addInstruction(new Write(reg1, stdio));
-		addInstruction(new Constant(115, reg1));
-		addInstruction(new Write(reg1, stdio));
-		addInstruction(new Constant(101, reg1));
-		addInstruction(new Write(reg1, stdio));
+		addInstruction(new Constant(102, reg2));
+		addInstruction(new Write(reg2, stdio));
+		addInstruction(new Constant(97, reg2));
+		addInstruction(new Write(reg2, stdio));
+		addInstruction(new Constant(108, reg2));
+		addInstruction(new Write(reg2, stdio));
+		addInstruction(new Constant(115, reg2));
+		addInstruction(new Write(reg2, stdio));
+		addInstruction(new Constant(101, reg2));
+		addInstruction(new Write(reg2, stdio));
 		addInstruction(new Jump(new Target(9, false)));
 	
 		//True
-		addInstruction(new Constant(116, reg1));
-		addInstruction(new Write(reg1, stdio));
-		addInstruction(new Constant(114, reg1));
-		addInstruction(new Write(reg1, stdio));
-		addInstruction(new Constant(117, reg1));
-		addInstruction(new Write(reg1, stdio));
-		addInstruction(new Constant(101, reg1));
-		addInstruction(new Write(reg1, stdio));
+		addInstruction(new Constant(116, reg2));
+		addInstruction(new Write(reg2, stdio));
+		addInstruction(new Constant(114, reg2));
+		addInstruction(new Write(reg2, stdio));
+		addInstruction(new Constant(117, reg2));
+		addInstruction(new Write(reg2, stdio));
+		addInstruction(new Constant(101, reg2));
+		addInstruction(new Write(reg2, stdio));
 		
 		//NewLine
-		addInstruction(new Constant(10, reg1));
-		addInstruction(new Write(reg1, stdio));
+		addInstruction(new Constant(10, reg2));
+		addInstruction(new Write(reg2, stdio));
 			
 		//Ensure writing is finished before giving up the lock
 		addInstruction(new Read(new MemAddr(0)));
-		addInstruction(new Receive(reg1));
+		addInstruction(new Receive(reg2));
 		
-		registers.clearRegister(reg1);
+		registers.clearRegister(reg2);
 		
 		addInstruction(new Write(reg_zero, new MemAddr(outputFlagsOffset)));
 			
@@ -648,8 +650,6 @@ public class Generator extends YallBaseVisitor<Register>{
 			addInstruction(new Store(reg1, addr));
 		}
 		
-		//if register1 was A, B, C, D or E, unclaim it
-
 		registers.clearRegister(reg1);
 
 		return null;
@@ -680,7 +680,22 @@ public class Generator extends YallBaseVisitor<Register>{
 	
 	@Override public Register visitBoolExprBoolOp(@NotNull YallParser.BoolExprBoolOpContext ctx) { 
 		Register reg1 = visit(ctx.boolExpr(0));
+		
+		//If the registermanager is short on registers, push left answer to the stack, to provide the right side with enough registers to compute
+		boolean usesStack = false;
+		if(registers.free() < 2){
+			usesStack = true;
+			addInstruction(new Push(reg1));
+			registers.clearRegister(reg1);			
+		}
+		
 		Register reg2 = visit(ctx.boolExpr(1));
+		
+		//Regain the left value from the stack if required
+		if(usesStack){
+			reg1 = registers.getFreeRegister();
+			addInstruction(new Pop(reg1));
+		}
 		
 		if(ctx.boolOp().AND() != null){
 			addInstruction(new Compute(OpCode.AND, reg1, reg2, reg2));
@@ -710,7 +725,22 @@ public class Generator extends YallBaseVisitor<Register>{
 
 	@Override public Register visitBoolExprCompOp(@NotNull YallParser.BoolExprCompOpContext ctx) { 
 		Register reg1 = visit(ctx.addExpr(0));
+		
+		//If the registermanager is short on registers, push left answer to the stack, to provide the right side with enough registers to compute
+		boolean usesStack = false;
+		if(registers.free() < 2){
+			usesStack = true;
+			addInstruction(new Push(reg1));
+			registers.clearRegister(reg1);			
+		}
+		
 		Register reg2 = visit(ctx.addExpr(1));
+		
+		//Regain the left value from the stack if required
+		if(usesStack){
+			reg1 = registers.getFreeRegister();
+			addInstruction(new Pop(reg1));
+		}
 		
 		if(ctx.compOp().GT() != null){
 			addInstruction(new Compute(OpCode.GT, reg1, reg2, reg2));
@@ -731,7 +761,22 @@ public class Generator extends YallBaseVisitor<Register>{
 	
 	@Override public Register visitBoolExprCompEqOpAdd(@NotNull YallParser.BoolExprCompEqOpAddContext ctx) { 
 		Register reg1 = visit(ctx.addExpr(0));
+		
+		//If the registermanager is short on registers, push left answer to the stack, to provide the right side with enough registers to compute
+		boolean usesStack = false;
+		if(registers.free() < 2){
+			usesStack = true;
+			addInstruction(new Push(reg1));
+			registers.clearRegister(reg1);			
+		}
+		
 		Register reg2 = visit(ctx.addExpr(1));
+		
+		//Regain the left value from the stack if required
+		if(usesStack){
+			reg1 = registers.getFreeRegister();
+			addInstruction(new Pop(reg1));
+		}
 		
 		if(ctx.compEqOp().EQ() != null){
 			addInstruction(new Compute(OpCode.EQUAL, reg1, reg2, reg2));
@@ -748,7 +793,22 @@ public class Generator extends YallBaseVisitor<Register>{
 	
 	@Override public Register visitBoolExprCompEqOpBool(@NotNull YallParser.BoolExprCompEqOpBoolContext ctx) { 
 		Register reg1 = visit(ctx.boolExpr(0));
+
+		//If the registermanager is short on registers, push left answer to the stack, to provide the right side with enough registers to compute
+		boolean usesStack = false;
+		if(registers.free() < 2){
+			usesStack = true;
+			addInstruction(new Push(reg1));
+			registers.clearRegister(reg1);			
+		}
+		
 		Register reg2 = visit(ctx.boolExpr(1));
+		
+		//Regain the left value from the stack if required
+		if(usesStack){
+			reg1 = registers.getFreeRegister();
+			addInstruction(new Pop(reg1));
+		}
 		
 		if(ctx.compEqOp().EQ() != null){
 			addInstruction(new Compute(OpCode.EQUAL, reg1, reg2, reg2));
@@ -779,8 +839,22 @@ public class Generator extends YallBaseVisitor<Register>{
 	
 	@Override public Register visitAddExprAddOp(@NotNull YallParser.AddExprAddOpContext ctx) { 
 		Register reg1 = visit(ctx.addExpr(0));
+
+		//If the registermanager is short on registers, push left answer to the stack, to provide the right side with enough registers to compute
+		boolean usesStack = false;
+		if(registers.free() < 2){
+			usesStack = true;
+			addInstruction(new Push(reg1));
+			registers.clearRegister(reg1);			
+		}
+		
 		Register reg2 = visit(ctx.addExpr(1));
 		
+		//Regain the left value from the stack if required
+		if(usesStack){
+			reg1 = registers.getFreeRegister();
+			addInstruction(new Pop(reg1));
+		}		
 		if(ctx.addOp().PLUS() != null){
 			addInstruction(new Compute(OpCode.ADD, reg1, reg2, reg2));
 		} else if(ctx.addOp().MINUS() != null){
@@ -805,7 +879,22 @@ public class Generator extends YallBaseVisitor<Register>{
 	
 	@Override public Register visitMultExprMultOp(@NotNull YallParser.MultExprMultOpContext ctx) { 
 		Register reg1 = visit(ctx.multExpr(0));
+
+		//If the registermanager is short on registers, push left answer to the stack, to provide the right side with enough registers to compute
+		boolean usesStack = false;
+		if(registers.free() < 2){
+			usesStack = true;
+			addInstruction(new Push(reg1));
+			registers.clearRegister(reg1);			
+		}
+		
 		Register reg2 = visit(ctx.multExpr(1));
+		
+		//Regain the left value from the stack if required
+		if(usesStack){
+			reg1 = registers.getFreeRegister();
+			addInstruction(new Pop(reg1));
+		}
 		
 		if(ctx.multOp().TIMES() != null){
 			addInstruction(new Compute(OpCode.MUL, reg1, reg2, reg2));

@@ -1,0 +1,37 @@
+!@
+!	Correct
+!	Several more complicated expressions, all outputs should be true
+@!
+
+YALL CorrectExpressions
+
+integer Int1 is 0;
+integer Int2 is 1;
+integer Int3 is 4;
+
+
+!! 0 + 1 + 4 + 0 + 1 + 4 + 0 + 1 + 4 =15
+Int1 is Int1 plus Int2 plus Int3 plus Int1 plus Int2 plus Int3 plus Int1 plus Int2 plus Int3;
+outputBoolean Int1 == 15;
+
+
+Int1 is 2;
+
+!! 2 + 4 * 2 + (7-3) * 8 = 2 + 8 + 3 * 8 = 34
+Int1 is Int1 plus 4 times Int2+ plus (7 minus Int3) times 8;
+outputBoolean Int1 == 34;
+
+
+Int1 is 2;
+Int2 is 3;
+Int3 is 5;
+
+!! 2 + ( 3 * ( 5 * ( 4 + ( 9 / ( 12 mod 9))))) = 
+!!  2 + ( 3 * ( 5 * ( 4 + ( 9 / 3)))) =
+!!  2 + ( 3 * ( 5 * ( 4 + 3))) =
+!!  2 + ( 3 * ( 5 * 7)) = 2 + 3 * 35 = 107
+
+Int1 is Int1 plus (Int2 times (Int3 times (4 plus (9 div (12 mod 8+)))));
+outputBoolean Int1 == 107;
+
+

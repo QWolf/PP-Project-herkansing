@@ -19,7 +19,6 @@ public class RegisterManager {
 		registers.push(new Register("RegE"));
 		free = 5;
 		possibleRegisters = registers;
-		
 	}
 	
 	/*

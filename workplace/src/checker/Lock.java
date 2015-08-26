@@ -7,8 +7,10 @@ public class Lock {
 	
 	private final String id;
 	
-	// 2 * checker.locks.size() 
-	//	-> Offset for IsLocked flag
+	// Global Memory address 2 * checker.locks.size() (=offset) is used to tell if this lock is locked
+	// Global Memory address offset + 1 is used to tell which thread owns the lock
+	
+	
 	private final int offset;
 	
 	public Lock(String id, int offset){
